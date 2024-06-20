@@ -5,6 +5,7 @@ import com.sparta.fooddeliveryapp.domain.cart.service.CartService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,12 @@ public class CartController {
     @PostMapping
     public ResponseEntity<String> createCart(@RequestParam Long cartId, @RequestBody CartRequestDto requestDto) {
         cartService.createCart(cartId, requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("장바구니 담기 완료");
+        return ResponseEntity.status(HttpStatus.OK).body("장바구니 담기 완료");
     }
 
+    @DeleteMapping
+    public ResponseEntity<String> deleteCart(@RequestParam Long cartId) {
+        cartService.deleteCart(cartId);
+        return ResponseEntity.status(HttpStatus.OK).body("메뉴삭제 완료");
+    }
 }
