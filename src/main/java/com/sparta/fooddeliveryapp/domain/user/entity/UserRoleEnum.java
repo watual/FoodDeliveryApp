@@ -1,4 +1,4 @@
-package com.sparta.fooddeliveryapp.domain.review.entity;
+package com.sparta.fooddeliveryapp.domain.user.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

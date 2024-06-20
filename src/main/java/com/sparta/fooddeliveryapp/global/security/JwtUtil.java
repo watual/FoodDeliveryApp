@@ -1,11 +1,9 @@
 package com.sparta.fooddeliveryapp.global.security;
 
-import com.sparta.fooddeliveryapp.domain.review.entity.User;
-import com.sparta.fooddeliveryapp.domain.review.entity.UserRoleEnum;
-import com.sparta.fooddeliveryapp.domain.review.repository.UserRepository;
+import com.sparta.fooddeliveryapp.domain.user.entity.UserRoleEnum;
+import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

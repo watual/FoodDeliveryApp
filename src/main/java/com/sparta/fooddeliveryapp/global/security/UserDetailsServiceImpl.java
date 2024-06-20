@@ -1,6 +1,6 @@
 package com.sparta.fooddeliveryapp.global.security;
-import com.sparta.fooddeliveryapp.domain.review.entity.User;
-import com.sparta.fooddeliveryapp.domain.review.repository.UserRepository;
+import com.sparta.fooddeliveryapp.domain.user.entity.User;
+import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

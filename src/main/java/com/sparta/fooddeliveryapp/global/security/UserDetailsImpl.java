@@ -1,7 +1,7 @@
 package com.sparta.fooddeliveryapp.global.security;
 
-import com.sparta.fooddeliveryapp.domain.review.entity.User;
-import com.sparta.fooddeliveryapp.domain.review.entity.UserRoleEnum;
+import com.sparta.fooddeliveryapp.domain.user.entity.User;
+import com.sparta.fooddeliveryapp.domain.user.entity.UserRoleEnum;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
