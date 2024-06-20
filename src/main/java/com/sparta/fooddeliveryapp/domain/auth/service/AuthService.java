@@ -39,6 +39,8 @@ public class AuthService {
             user.setRefreshToken(newRefreshToken);
             response.setHeader("Authorization", newAccessToken);
             response.setHeader("RefreshToken", newRefreshToken);
+
+            log.info("토큰이 새로 발급되었습니다.");
         }
     }
 }
