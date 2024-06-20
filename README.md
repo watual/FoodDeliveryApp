@@ -1,2 +1,8 @@
-# FoodDeliveryApp
+# 📄 FoodDeliveryApp
  
+프로젝트 이름 : FoodDeliveryApp
+프로젝트 제작기간 : 2024.06.19 ~ 2024.06.23
+프로젝트 설명 : 배달의 민족을 모티브로한 음식 주문 배달 서비스
+공부하시느라 많이 배고프시죠?
+그런데 밖에 나가기에는 너무 덥잖아요!
+저희 FoodDeliveryApp에서 언제든지 주문 주세요!
