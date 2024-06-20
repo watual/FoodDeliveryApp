@@ -20,4 +20,10 @@ public class User {
     private String password;
 
     private UserRoleEnum role;
+
+    private String refreshToken;
+
+    public void setRefreshToken(String refreshToken){
+        this.refreshToken = refreshToken;
+    }
 }
