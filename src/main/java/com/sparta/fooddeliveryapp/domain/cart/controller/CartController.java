@@ -40,11 +40,11 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Cart>> getCart(
+    public ResponseEntity<CartListResponseDto> getCart(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "5") int size) {
 
-        Page<Cart> cartItems = cartService.getCart(page, size);
+        CartListResponseDto cartItems = cartService.getCart(page, size);
 
         return ResponseEntity.status(HttpStatus.OK).body(cartItems);
     }

@@ -29,7 +29,7 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false)
-    private Long id;
+    private Long cartId;
 
     @ManyToOne
     @JoinColumn(name = "store_id", nullable = false)
