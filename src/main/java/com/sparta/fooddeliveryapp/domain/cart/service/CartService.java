@@ -53,7 +53,10 @@ public class CartService {
                 cart.getMenu().getMenuName(),
                 cart.getMenu().getPrice()
             ));
-            total_price += cart.getMenu().getPrice();
+        }
+
+        for (int price : cartRepository.findAll().getMenu().getPrice()) {
+            total_price += price;
         }
 
         return new CartListResponseDto(cartItems, total_price);
