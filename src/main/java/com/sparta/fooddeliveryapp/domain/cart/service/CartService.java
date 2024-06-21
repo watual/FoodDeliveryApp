@@ -1,11 +1,15 @@
 package com.sparta.fooddeliveryapp.domain.cart.service;
 
+import com.sparta.fooddeliveryapp.domain.cart.dto.CartListResponseDto;
 import com.sparta.fooddeliveryapp.domain.cart.dto.CartRequestDto;
+import com.sparta.fooddeliveryapp.domain.cart.dto.CartResponseDto;
 import com.sparta.fooddeliveryapp.domain.cart.entity.Cart;
 import com.sparta.fooddeliveryapp.domain.cart.repository.CartRepository;
 import com.sparta.fooddeliveryapp.domain.menu.entity.Menu;
 import com.sparta.fooddeliveryapp.domain.store.entity.Store;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,6 +36,23 @@ public class CartService {
 
         Cart cart = new Cart(store, menu, user);
         cartRepository.save(cart);
+    }
+
+    public CartListResponseDto getCart() {
+        List<Cart> cartList = cartRepository.findAll();
+        List<CartResponseDto> cartItems = cartList.stream()
+            .map(cart -> new CartResponseDto(
+                cart.getStore().getStoreName(),
+                cart.getMenu().getMenuName(),
+                cart.getMenu().getPrice()
+            ))
+            .collect(Collectors.toList());
+
+        Integer total_price = cartItems.stream()
+            .mapToInt(CartResponseDto::getPrice)
+            .sum();
+
+        return new CartListResponseDto(cartItems, total_price);
     }
 
     public Cart findCartById(Long cartId) {
