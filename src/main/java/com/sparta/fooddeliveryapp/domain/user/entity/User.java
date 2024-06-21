@@ -59,6 +59,11 @@ public class User {
     }
     public void setStatusDeactivated(){ this.status = UserStatusEnum.DEACTIVATED; }
 
+    public void updateName(String name){this.name = name;}
+    public void updateNickname(String nickname){this.nickname = nickname;}
+    public void updateAddress(String address){this.address = address;}
+    public void updateIntro(String intro){this.intro = intro;}
+
     public User(String loginId, String password, String name, String nickname, String address, String phone,
                 String email, String intro, UserRoleEnum role, UserStatusEnum status) {
         this.loginId = loginId;

@@ -2,16 +2,21 @@ package com.sparta.fooddeliveryapp.domain.user.service;
 
 import com.sparta.fooddeliveryapp.domain.user.dto.DeactivateRequestDto;
 import com.sparta.fooddeliveryapp.domain.user.dto.SignupRequestDto;
+import com.sparta.fooddeliveryapp.domain.user.dto.UpdateProfileRequestDto;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.domain.user.entity.UserRoleEnum;
 import com.sparta.fooddeliveryapp.domain.user.entity.UserStatusEnum;
 import com.sparta.fooddeliveryapp.global.exception.*;
 import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
 import com.sparta.fooddeliveryapp.global.security.JwtUtil;
+import com.sparta.fooddeliveryapp.global.security.UserDetailsImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -66,13 +71,34 @@ public class UserService {
     }
 
     @Transactional
-    public void deactivateUser(DeactivateRequestDto requestDto, HttpServletRequest request) {
-        String loginId = jwtUtil.extractLoginId(request.getHeader("Authorization").substring(7));
-        User user = userRepository.findByLoginId(loginId).orElseThrow(NullPointerException::new);
-
-        if(!( user.getPassword().equals( requestDto.getPassword() ))) {
+    public void deactivateUser(DeactivateRequestDto requestDto, User user) {
+        User tempUser = loadUserByLoginId(user.getLoginId());
+        if(!( passwordEncoder.matches(requestDto.getPassword(), tempUser.getPassword()) )) {
             throw new WrongPasswordException();
         }
-        user.setStatusDeactivated();
+        tempUser.setStatusDeactivated();
+        log.info("user deactivated");
+    }
+
+    @Transactional
+    public void updateProfile(UpdateProfileRequestDto requestDto, User user) {
+        User tempUser = loadUserByLoginId(user.getLoginId());
+        if(requestDto.getName() != null) {
+            tempUser.updateName(requestDto.getName());
+        }
+        if(requestDto.getNickname() != null) {
+            tempUser.updateNickname(requestDto.getNickname());
+        }
+        if(requestDto.getAddress() != null) {
+            tempUser.updateAddress(requestDto.getAddress());
+        }
+        if(requestDto.getIntro() != null) {
+            tempUser.updateIntro(requestDto.getIntro());
+        }
+        log.info("profile updated");
+    }
+
+    public User loadUserByLoginId(String loginId) {
+        return userRepository.findByLoginId(loginId).orElseThrow(UserNotFoundException::new);
     }
 }

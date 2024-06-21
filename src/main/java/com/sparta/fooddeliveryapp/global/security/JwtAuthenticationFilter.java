@@ -36,9 +36,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try{
             LoginRequestDto requestDto = new ObjectMapper().readValue(request.getInputStream(), LoginRequestDto.class);
 
-            User user = userRepository.findByLoginId(requestDto.getLoginId()).orElseThrow(NullPointerException::new);
-            if(user.getStatus() == UserStatusEnum.DEACTIVATED){
-                throw new DeactivatedUserException();
+            User user = userRepository.findByLoginId(requestDto.getLoginId()).orElse(null);
+            if(user != null) {
+                if (user.getStatus() == UserStatusEnum.DEACTIVATED) {
+                    throw new DeactivatedUserException();
+                }
             }
 
             return getAuthenticationManager().authenticate(
