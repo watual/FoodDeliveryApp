@@ -8,10 +8,14 @@ import com.sparta.fooddeliveryapp.domain.cart.repository.CartRepository;
 import com.sparta.fooddeliveryapp.domain.menu.entity.Menu;
 import com.sparta.fooddeliveryapp.domain.store.entity.Store;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,21 +42,22 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-    public CartListResponseDto getCart() {
-        List<Cart> cartList = cartRepository.findAll();
-        List<CartResponseDto> cartItems = cartList.stream()
-            .map(cart -> new CartResponseDto(
+    public CartListResponseDto getCart(int page, int size) {
+        Page<Cart> cartPage = cartRepository.findAll(PageRequest.of(page, size, Sort.by(Direction.DESC, "createdAt")));
+        List<CartResponseDto> cartItems = new ArrayList<>();
+        int total_price = 0;
+
+        for(Cart cart : cartPage.getContent()) {
+            cartItems.add(new CartResponseDto(
                 cart.getStore().getStoreName(),
                 cart.getMenu().getMenuName(),
                 cart.getMenu().getPrice()
-            ))
-            .collect(Collectors.toList());
-
-        Integer total_price = cartItems.stream()
-            .mapToInt(CartResponseDto::getPrice)
-            .sum();
+            ));
+            total_price += cart.getMenu().getPrice();
+        }
 
         return new CartListResponseDto(cartItems, total_price);
+
     }
 
     public Cart findCartById(Long cartId) {
