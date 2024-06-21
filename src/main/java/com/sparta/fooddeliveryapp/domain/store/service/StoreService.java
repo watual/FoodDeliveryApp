@@ -17,4 +17,8 @@ public class StoreService {
     public Page<Store> getAllStores(int page, int size) {
         return storeRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(page, size));
     }
+
+    public Page<Store> searchStores(String storeName, int page, int size) {
+        return storeRepository.findByStoreNameContainingIgnoreCaseOrderByCreatedAtDesc(storeName, PageRequest.of(page, size));
+    }
 }

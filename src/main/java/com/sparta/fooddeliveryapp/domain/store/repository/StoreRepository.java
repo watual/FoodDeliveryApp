@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
     Page<Store> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    Page<Store> findByStoreNameContainingIgnoreCaseOrderByCreatedAtDesc(String storeName, Pageable pageable);
 }
