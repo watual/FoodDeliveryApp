@@ -41,5 +41,8 @@ public class SignupRequestDto {
     @Size(max=30, message = "소개는 최대 30자입니다.")
     private String intro;
 
+    @NotBlank(message = "USER/SELLER/ADMIN 중에서 선택해주세요.")
     private UserRoleEnum role;
+
+    private String adminToken;
 }
