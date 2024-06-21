@@ -1,14 +1,15 @@
 package com.sparta.fooddeliveryapp.domain.user.service;
 
+import com.sparta.fooddeliveryapp.domain.user.dto.DeactivateRequestDto;
 import com.sparta.fooddeliveryapp.domain.user.dto.SignupRequestDto;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.domain.user.entity.UserRoleEnum;
 import com.sparta.fooddeliveryapp.domain.user.entity.UserStatusEnum;
-import com.sparta.fooddeliveryapp.global.exception.DuplicateEmailException;
-import com.sparta.fooddeliveryapp.global.exception.DuplicatePhoneException;
+import com.sparta.fooddeliveryapp.global.exception.*;
 import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
-import com.sparta.fooddeliveryapp.global.exception.DuplicateLoginIdException;
-import com.sparta.fooddeliveryapp.global.exception.WrongAdminTokenException;
+import com.sparta.fooddeliveryapp.global.security.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +24,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     public void signup(SignupRequestDto signupRequestDto) {
@@ -61,5 +63,16 @@ public class UserService {
         User user = new User(loginId, password, name, nickname, address, phone, email, intro, role, status);
         userRepository.save(user);
         log.info("회원가입 완료");
+    }
+
+    @Transactional
+    public void deactivateUser(DeactivateRequestDto requestDto, HttpServletRequest request) {
+        String loginId = jwtUtil.extractLoginId(request.getHeader("Authorization").substring(7));
+        User user = userRepository.findByLoginId(loginId).orElseThrow(NullPointerException::new);
+
+        if(!( user.getPassword().equals( requestDto.getPassword() ))) {
+            throw new WrongPasswordException();
+        }
+        user.setStatusDeactivated();
     }
 }

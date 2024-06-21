@@ -57,7 +57,7 @@ public class User {
     public void setRefreshToken(String refreshToken){
         this.refreshToken = refreshToken;
     }
-    public void setStatus(UserStatusEnum status){ this.status = status; }
+    public void setStatusDeactivated(){ this.status = UserStatusEnum.DEACTIVATED; }
 
     public User(String loginId, String password, String name, String nickname, String address, String phone,
                 String email, String intro, UserRoleEnum role, UserStatusEnum status) {
