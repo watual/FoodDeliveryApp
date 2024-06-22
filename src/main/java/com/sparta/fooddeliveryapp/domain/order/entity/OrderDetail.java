@@ -1,5 +1,6 @@
 package com.sparta.fooddeliveryapp.domain.order.entity;
 
+import com.sparta.fooddeliveryapp.domain.menu.entity.Menu;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,8 +12,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.awt.*;
 
 @Entity
 @Getter
