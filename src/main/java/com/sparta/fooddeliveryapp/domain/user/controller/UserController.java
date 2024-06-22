@@ -2,10 +2,10 @@ package com.sparta.fooddeliveryapp.domain.user.controller;
 
 import com.sparta.fooddeliveryapp.domain.user.dto.DeactivateRequestDto;
 import com.sparta.fooddeliveryapp.domain.user.dto.SignupRequestDto;
+import com.sparta.fooddeliveryapp.domain.user.dto.UpdatePasswordRequestDto;
 import com.sparta.fooddeliveryapp.domain.user.dto.UpdateProfileRequestDto;
 import com.sparta.fooddeliveryapp.domain.user.service.UserService;
 import com.sparta.fooddeliveryapp.global.security.UserDetailsImpl;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +37,12 @@ public class UserController {
         userService.updateProfile(requestDto, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body("프로필 수정 완료");
     }
+
+//    @PutMapping("/update-password")
+//    public ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+//        userService.updatePassword(requestDto, userDetails.getUser());
+//        return ResponseEntity.status(HttpStatus.OK).body("비밀번호 수정 완료");
+//    }
 
 
 }
