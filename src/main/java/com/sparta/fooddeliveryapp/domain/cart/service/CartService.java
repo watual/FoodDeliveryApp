@@ -6,10 +6,14 @@ import com.sparta.fooddeliveryapp.domain.cart.dto.CartResponseDto;
 import com.sparta.fooddeliveryapp.domain.cart.entity.Cart;
 import com.sparta.fooddeliveryapp.domain.cart.repository.CartRepository;
 import com.sparta.fooddeliveryapp.domain.menu.entity.Menu;
+import com.sparta.fooddeliveryapp.domain.menu.repository.MenuRepository;
 import com.sparta.fooddeliveryapp.domain.store.entity.Store;
+import com.sparta.fooddeliveryapp.domain.store.repository.StoreRepository;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -55,9 +59,9 @@ public class CartService {
             ));
         }
 
-        for (int price : cartRepository.findAll().getMenu().getPrice()) {
-            totalPrice += price;
-        }
+//        for (int price : cartRepository.findAll().getMenu().getPrice()) {
+//            totalPrice += price;
+//        }
 
         return new CartListResponseDto(cartItems, totalPrice);
 
