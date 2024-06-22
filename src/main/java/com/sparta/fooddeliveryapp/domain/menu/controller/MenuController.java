@@ -59,4 +59,13 @@ public class MenuController {
         menuService.updateMenu(menuId, menuRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body("메뉴수정 완료");
     }
+
+    // 메뉴 삭제 (점주 유저)
+    @DeleteMapping("/{menuId}")
+    public ResponseEntity<?> deleteMenu(
+            @RequestHeader("Authorization") String token,
+            @PathVariable Long menuId) {
+        menuService.deleteMenu(menuId);
+        return ResponseEntity.status(HttpStatus.OK).body("메뉴삭제 완료");
+    }
 }

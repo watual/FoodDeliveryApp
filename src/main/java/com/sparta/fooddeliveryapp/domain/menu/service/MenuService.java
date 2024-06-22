@@ -40,4 +40,9 @@ public class MenuService {
         menu.setPrice(menuRequestDto.getPrice());
         menuRepository.save(menu);
     }
+
+    public void deleteMenu(Long menuId) {
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new IllegalArgumentException("해당 메뉴가 없습니다."));
+        menuRepository.delete(menu);
+    }
 }
