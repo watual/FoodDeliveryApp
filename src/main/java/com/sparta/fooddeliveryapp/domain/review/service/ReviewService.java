@@ -1,4 +1,53 @@
 package com.sparta.fooddeliveryapp.domain.review.service;
 
+import com.sparta.fooddeliveryapp.domain.order.entity.Orders;
+import com.sparta.fooddeliveryapp.domain.order.repository.OrderRepository;
+import com.sparta.fooddeliveryapp.domain.review.dto.ReviewCreateRequestDto;
+import com.sparta.fooddeliveryapp.domain.review.entity.Review;
+import com.sparta.fooddeliveryapp.domain.review.repository.ReviewRepository;
+import com.sparta.fooddeliveryapp.domain.user.entity.User;
+import com.sparta.fooddeliveryapp.global.error.exception.InsufficientOrdersException;
+import com.sparta.fooddeliveryapp.global.error.exception.ReviewException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
 public class ReviewService {
+
+    private final ReviewRepository reviewRepository;
+    private final OrderRepository orderRepository;
+
+    @Transactional
+    public void createReview(User user, ReviewCreateRequestDto requestDto) {
+        Long orderId = requestDto.getOrdersId();
+        // 주문내역 조회
+        Orders orders = orderRepository.findById(orderId).orElseThrow(
+                () -> new InsufficientOrdersException("해당 주문을 찾을 수 없습니다.")
+        );
+        // 사용자 일치 확인
+        if (!Objects.equals(user.getUserId(), orders.getUser().getUserId())) {
+            throw new ReviewException("주문내역이 현재 사용자의 주문내역이 아닙니다");
+        }
+        // 작성된 이력이 있는지 확인
+        if(reviewRepository.existsByOrdersId(orderId)) {
+            throw new ReviewException("이미 리뷰를 작성했습니다");
+        }
+
+        Review review = Review.builder()
+                .user(user)
+                .store(orders.getStore())
+                .ordersId(orders.getOrdersId())
+                .content(requestDto.getContent())
+                .rate(requestDto.getRate())
+                .build();
+
+        reviewRepository.save(review);
+        log.info("Complete createReview Service");
+    }
 }
