@@ -45,7 +45,7 @@ public class CartService {
     public CartListResponseDto getCart(int page, int size) {
         Page<Cart> cartPage = cartRepository.findAll(PageRequest.of(page, size, Sort.by(Direction.DESC, "createdAt")));
         List<CartResponseDto> cartItems = new ArrayList<>();
-        int total_price = 0;
+        int totalPrice = 0;
 
         for(Cart cart : cartPage.getContent()) {
             cartItems.add(new CartResponseDto(
@@ -56,10 +56,10 @@ public class CartService {
         }
 
         for (int price : cartRepository.findAll().getMenu().getPrice()) {
-            total_price += price;
+            totalPrice += price;
         }
 
-        return new CartListResponseDto(cartItems, total_price);
+        return new CartListResponseDto(cartItems, totalPrice);
 
     }
 
