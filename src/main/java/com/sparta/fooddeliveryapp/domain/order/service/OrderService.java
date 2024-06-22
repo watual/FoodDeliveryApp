@@ -16,6 +16,9 @@ import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,14 +59,16 @@ public class OrderService {
         }
     }
 
-    public List<OrderResponseDto> getOrderList(Long userId) {
+    public List<OrderResponseDto> getOrderList(Long userId, int page, int size) {
 
         User user = userRepository.findById(userId).get();
-        List<Orders> ordersList = orderRepository.findAllByUserOrderByCreatedAtDesc(user);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Orders> ordersPage = orderRepository.findAllByUserOrderByCreatedAtDesc(user, pageable);
+
         List<OrderResponseDto> orderResponseDtoList = new ArrayList<>();
         List<OrderDetailResponseDto> orderDetailResponseDtoList = new ArrayList<>();
 
-        for (Orders orders : ordersList) {
+        for (Orders orders : ordersPage) {
 
             //이 주문번호에 해당하는 주문상세 리스트 조회하는 메서드가 필요하다.
             List<OrderDetail> orderDetailList = orderDetailRepository.findAllByOrderId(orders.getOrderId());
