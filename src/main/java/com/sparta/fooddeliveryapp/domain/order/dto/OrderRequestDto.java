@@ -16,6 +16,8 @@ public class OrderRequestDto {
 
     private Integer totalPrice;
 
+    private String store_id;
+
     private List<OrderDetailRequestDto> orderDetailDtoList;
 
 }
