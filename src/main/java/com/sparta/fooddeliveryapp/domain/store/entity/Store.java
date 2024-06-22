@@ -1,5 +1,6 @@
 package com.sparta.fooddeliveryapp.domain.store.entity;
 
+import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,10 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long storeId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column
     private Double rate;
