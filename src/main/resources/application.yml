@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: FoodDeliveryApp
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587   # SMTP ?? ?? (?: TLS? ?? ????? 587, SSL? ?? 465)
+    properties:
+      mail:
+        smtp:
+          auth: true      # SMTP ?? ?? ??
+          starttls:
+            enable: true  # STARTTLS ?? ?? (TLS ???)
+
+#server:
+#  port: 443
+#  ssl:
+#    enabled: true
+#    key-store: src/main/resources/bootsecurity.p12
+#    key-store-password: ${KEY_STORE_PASSWORD}
+#    key-store-type: PKCS12
+#    key-alias: bootsecurity
