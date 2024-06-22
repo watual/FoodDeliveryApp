@@ -58,6 +58,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/auth/refresh-token").permitAll()
                         .requestMatchers("/api/users/login").permitAll()
                         .requestMatchers("/api/users/signup").permitAll()
+                        .requestMatchers("/api/users/profile/{nickname}").permitAll()
                         .requestMatchers("/error").permitAll()  // 서버 단에서 에러시 에러창 띄워주는 url
                         .anyRequest().authenticated()
         );

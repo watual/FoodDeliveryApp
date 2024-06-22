@@ -1,16 +1,16 @@
 package com.sparta.fooddeliveryapp.domain.user.controller;
 
-import com.sparta.fooddeliveryapp.domain.user.dto.DeactivateRequestDto;
-import com.sparta.fooddeliveryapp.domain.user.dto.SignupRequestDto;
-import com.sparta.fooddeliveryapp.domain.user.dto.UpdatePasswordRequestDto;
-import com.sparta.fooddeliveryapp.domain.user.dto.UpdateProfileRequestDto;
+import com.sparta.fooddeliveryapp.domain.user.dto.*;
 import com.sparta.fooddeliveryapp.domain.user.service.UserService;
 import com.sparta.fooddeliveryapp.global.security.UserDetailsImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -36,6 +36,18 @@ public class UserController {
     public ResponseEntity<String> updateProfile(@RequestBody UpdateProfileRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         userService.updateProfile(requestDto, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body("프로필 수정 완료");
+    }
+
+    @GetMapping("/profile")
+    public ProfileResponseDto getProfile(@Valid @AuthenticationPrincipal UserDetailsImpl userDetails){
+        ProfileResponseDto res = userService.getProfile(userDetails.getUser());
+        return res;
+    }
+
+    @GetMapping("/profile/{nickname}")
+    public List<UserSearchResponseDto> UserSearch(@PathVariable String nickname){
+        List<UserSearchResponseDto> res = userService.UserSearch(nickname);
+        return res;
     }
 
 //    @PutMapping("/update-password")

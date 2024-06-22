@@ -1,8 +1,6 @@
 package com.sparta.fooddeliveryapp.domain.user.service;
 
-import com.sparta.fooddeliveryapp.domain.user.dto.DeactivateRequestDto;
-import com.sparta.fooddeliveryapp.domain.user.dto.SignupRequestDto;
-import com.sparta.fooddeliveryapp.domain.user.dto.UpdateProfileRequestDto;
+import com.sparta.fooddeliveryapp.domain.user.dto.*;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.domain.user.entity.UserRoleEnum;
 import com.sparta.fooddeliveryapp.domain.user.entity.UserStatusEnum;
@@ -15,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -97,6 +97,34 @@ public class UserService {
 
     public User loadUserByLoginId(String loginId) {
         return userRepository.findByLoginId(loginId).orElseThrow(UserNotFoundException::new);
+    }
+
+    public ProfileResponseDto getProfile(User user) {
+
+        Long userId = user.getUserId();
+        String name = user.getName();
+        String nickname = user.getNickname();
+        String address = user.getAddress();
+        String phone = user.getPhone();
+        String email = user.getEmail();
+        String intro = user.getIntro();
+
+        ProfileResponseDto result = new ProfileResponseDto(userId, name, nickname, address, phone, email, intro);
+        log.info("프로필 조회 완료");
+        return result;
+    }
+
+    public List<UserSearchResponseDto> UserSearch(String nickname) {
+        List<User> searchedUsers = userRepository.findAllByNickname(nickname);
+        List<UserSearchResponseDto> result =new ArrayList<>();
+        for(User user : searchedUsers){
+            String email = user.getEmail();
+            String intro = user.getIntro();
+            UserStatusEnum status = user.getStatus();
+            result.add(new UserSearchResponseDto(nickname, email, intro, status));
+        }
+        log.info("유저 조회 완료");
+        return result;
     }
 
 //    @Transactional
