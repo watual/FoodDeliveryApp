@@ -1,5 +1,6 @@
 package com.sparta.fooddeliveryapp.domain.store.entity;
 
+import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,10 @@ public class Store {
     @Column
     private Long storeId;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @Column
     private Double rate;
 
@@ -28,7 +33,4 @@ public class Store {
 
     @Column
     private String intro;
-
-    @Column(updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now(); // 생성일자 추가
 }

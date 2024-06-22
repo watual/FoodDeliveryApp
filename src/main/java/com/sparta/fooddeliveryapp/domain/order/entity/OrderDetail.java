@@ -1,6 +1,5 @@
 package com.sparta.fooddeliveryapp.domain.order.entity;
 
-import com.sparta.fooddeliveryapp.domain.menu.entity.Menu;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,6 +11,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.awt.*;
 
 @Entity
 @Getter
@@ -26,7 +27,7 @@ public class OrderDetail {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    private Orders orders;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", nullable = false)
@@ -34,8 +35,8 @@ public class OrderDetail {
 
     private Integer count;
 
-    public OrderDetail(Order order, Menu menu, Integer count) {
-        this.order = order;
+    public OrderDetail(Orders orders, Menu menu, Integer count) {
+        this.orders = orders;
         this.menu = menu;
         this.count = count;
     }
