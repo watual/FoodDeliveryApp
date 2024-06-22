@@ -43,10 +43,20 @@ public class MenuController {
         return ResponseEntity.ok(response);
     }
 
-    // 메뉴 등록
+    // 메뉴 등록 (점주 유저)
     @PostMapping
     public ResponseEntity<?> createMenu(@RequestHeader("Authorization") String token, @RequestBody MenuRequestDto menuRequestDto) {
         menuService.createMenu(menuRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body("메뉴등록 완료");
+    }
+
+    // 메뉴 수정 (점주 유저)
+    @PutMapping("/{menuId}")
+    public ResponseEntity<?> updateMenu(
+            @RequestHeader("Authorization") String token,
+            @PathVariable Long menuId,
+            @RequestBody MenuRequestDto menuRequestDto) {
+        menuService.updateMenu(menuId, menuRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body("메뉴수정 완료");
     }
 }
