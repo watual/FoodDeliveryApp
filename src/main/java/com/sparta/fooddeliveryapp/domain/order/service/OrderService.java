@@ -69,23 +69,9 @@ public class OrderService {
             List<OrderDetail> orderDetailList = orderDetailRepository.findAllByOrderId(orders.getOrderId());
 
             for (OrderDetail orderDetail : orderDetailList) {
-
-                orderDetailResponseDtoList.add(new OrderDetailResponseDto(
-                    orderDetail.getOrderDetailId(),
-                    orderDetail.getMenu().getMenuName(),
-                    orderDetail.getCount()
-                    )
-                );
+                orderDetailResponseDtoList.add(new OrderDetailResponseDto(orderDetail));
             }
-
-            orderResponseDtoList.add(new OrderResponseDto(
-                orders.getOrderId(),
-                orders.getStore().getStoreName(),
-                orders.getTotalPrice(),
-                orderDetailResponseDtoList,
-                orders.getCreatedAt()
-                )
-            );
+            orderResponseDtoList.add(new OrderResponseDto(orders, orderDetailResponseDtoList));
         }
 
         return orderResponseDtoList;

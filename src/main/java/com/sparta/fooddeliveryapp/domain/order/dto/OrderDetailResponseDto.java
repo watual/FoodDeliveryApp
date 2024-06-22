@@ -22,7 +22,7 @@ public class OrderDetailResponseDto {
 
     public OrderDetailResponseDto(OrderDetail orderDetail) {
         this.orderDetailId = orderDetail.getOrderDetailId();
-        this.menuName = orderDetail.getMenu().getMenuName();
+        this.menuName = orderDetail.getMenuName();
         this.count = orderDetail.getCount();
     }
 }

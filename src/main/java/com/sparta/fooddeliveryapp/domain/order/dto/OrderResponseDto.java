@@ -26,11 +26,12 @@ public class OrderResponseDto {
 
     private LocalDateTime createdAt;
 
-    public OrderResponseDto(Orders orders) {
+    public OrderResponseDto(Orders orders, List<OrderDetailResponseDto> dtoList) {
         this.orderId = orders.getOrderId();
-        this.storeName = orders.getStore().getStoreName();
+        this.storeName = orders.getStoreName();
         this.totalPrice = orders.getTotalPrice();
         this.createdAt = orders.getCreatedAt();
+        this.orderDetailResponseDtoList = dtoList;
     }
 
 }

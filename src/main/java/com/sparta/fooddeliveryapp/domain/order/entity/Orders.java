@@ -41,6 +41,8 @@ public class Orders {
 
     private Integer totalPrice;
 
+    private String storeName;
+
     @CreatedDate
     @Column(updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -50,6 +52,7 @@ public class Orders {
         this.store = store;
         this.user = user;
         this.totalPrice = totalPrice;
+        this.storeName = store.getStoreName();
     }
 
 
