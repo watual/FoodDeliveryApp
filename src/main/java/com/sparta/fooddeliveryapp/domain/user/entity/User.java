@@ -1,8 +1,11 @@
 package com.sparta.fooddeliveryapp.domain.user.entity;
 
 
+import com.fasterxml.jackson.databind.annotation.EnumNaming;
 import com.sparta.fooddeliveryapp.global.common.TimeStamped;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,10 +13,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "user")
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long userId;
 
     private String loginId;
@@ -32,8 +38,10 @@ public class User extends TimeStamped {
 
     private String intro;
 
+    @Enumerated(EnumType.STRING)
     private UserRoleEnum role;
 
+    @Enumerated(EnumType.STRING)
     private UserStatus status;
 
     private String refreshToken;
