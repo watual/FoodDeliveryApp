@@ -43,11 +43,6 @@ public class Cart {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @CreatedDate
-    @Column(updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
-
     public Cart(Store store, Menu menu, User user) {
         this.store = store;
         this.menu = menu;
