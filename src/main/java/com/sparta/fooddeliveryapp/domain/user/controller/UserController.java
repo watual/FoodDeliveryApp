@@ -52,11 +52,11 @@ public class UserController {
         return res;
     }
 
-//    @PutMapping("/update-password")
-//    public ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-//        userService.updatePassword(requestDto, userDetails.getUser());
-//        return ResponseEntity.status(HttpStatus.OK).body("비밀번호 수정 완료");
-//    }
+    @PutMapping("/update-password")
+    public ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        userService.updatePassword(requestDto, userDetails.getUser());
+        return ResponseEntity.status(HttpStatus.OK).body("비밀번호 수정 완료");
+    }
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) throws IOException {

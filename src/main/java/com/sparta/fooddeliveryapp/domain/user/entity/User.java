@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Table(name = "user")
@@ -21,8 +24,8 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-//    @ElementCollection
-//    private ArrayList<String> usedPasswordList = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    private List<UsedPassword> usedPasswordList = new ArrayList<>();
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -56,21 +59,17 @@ public class User {
     // image 가져오기
     // 생성 및 수정 시간은 타 클래스 implement 가져오는걸로
 
-//    public void addPasswordList(String password) {
-//        this.usedPasswordList.add(password);
-//    }
-//
-//    public void removeOldPasswordList(){
-//        this.usedPasswordList.remove(0);
-//    }
+    public void setUsedPasswordList(List<UsedPassword> usedPasswordList) {
+        this.usedPasswordList.clear();
+        if (usedPasswordList != null) {
+            this.usedPasswordList.addAll(usedPasswordList);
+        }
+    }
 
     public void setRefreshToken(String refreshToken){
         this.refreshToken = refreshToken;
     }
     public void setStatusDeactivated(){ this.status = UserStatusEnum.DEACTIVATED; }
-//    public void setUsedPasswordList(ArrayList<String> usedPasswordList) {
-//        this.usedPasswordList = usedPasswordList;
-//    }
 
     public void updateName(String name){this.name = name;}
     public void updateNickname(String nickname){this.nickname = nickname;}
