@@ -1,5 +1,6 @@
 package com.sparta.fooddeliveryapp.domain.review.entity;
 
+import com.sparta.fooddeliveryapp.domain.order.entity.Orders;
 import com.sparta.fooddeliveryapp.domain.store.entity.Store;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.global.common.TimeStamped;
@@ -24,15 +25,20 @@ public class Review extends TimeStamped {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "store_id", nullable = false)
     private Store store;
 
     @Column
-    private Long orderGroup;
+    private Long ordersId;
 
     @Column
     private String content;
 
     @Column
     private Long rate;
+
+    public void update(String content, Long rate) {
+        this.content = content;
+        this.rate = rate;
+    }
 }
