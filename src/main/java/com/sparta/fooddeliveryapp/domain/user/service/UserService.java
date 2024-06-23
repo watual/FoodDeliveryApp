@@ -7,15 +7,22 @@ import com.sparta.fooddeliveryapp.domain.user.entity.UserStatusEnum;
 import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
 import com.sparta.fooddeliveryapp.global.exception.*;
 import com.sparta.fooddeliveryapp.global.security.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static org.hibernate.query.results.Builders.fetch;
 
 @Service
 @Slf4j(topic = "UserService")
@@ -126,6 +133,24 @@ public class UserService {
         log.info("유저 조회 완료");
         return result;
     }
+
+    @Transactional
+    public void logout(HttpServletRequest request) {
+        String accessToken = request.getHeader("Authorization").substring(7);
+        String refreshToken = request.getHeader("RefreshToken").substring(7);
+
+        User user = loadUserByLoginId(jwtUtil.extractLoginId(accessToken));
+
+        // 서버에서 인증 상태를 초기화
+        LocalDateTime accessExpiration = jwtUtil.extractAllClaims(accessToken).getExpiration().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime refreshExpiration = jwtUtil.extractAllClaims(refreshToken).getExpiration().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        SecurityContextHolder.clearContext();
+        user.setRefreshToken(null);
+
+        log.info("logout success");
+    }
+
+
 
 //    @Transactional
 //    public void updatePassword(UpdatePasswordRequestDto requestDto, User user) {

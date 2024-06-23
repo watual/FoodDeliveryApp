@@ -3,6 +3,7 @@ package com.sparta.fooddeliveryapp.domain.user.controller;
 import com.sparta.fooddeliveryapp.domain.user.dto.*;
 import com.sparta.fooddeliveryapp.domain.user.service.UserService;
 import com.sparta.fooddeliveryapp.global.security.UserDetailsImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -55,6 +57,12 @@ public class UserController {
 //        userService.updatePassword(requestDto, userDetails.getUser());
 //        return ResponseEntity.status(HttpStatus.OK).body("비밀번호 수정 완료");
 //    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) throws IOException {
+        userService.logout(request);
+        return ResponseEntity.status(HttpStatus.OK).body("로그아웃 완료");
+    }
 
 
 }
