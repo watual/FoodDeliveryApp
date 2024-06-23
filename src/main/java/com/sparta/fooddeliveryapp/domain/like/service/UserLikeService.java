@@ -8,6 +8,8 @@ import com.sparta.fooddeliveryapp.global.error.exception.DuplicateLikeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserLikeService {
@@ -31,5 +33,11 @@ public class UserLikeService {
                 () -> new NullPointerException("취소할 좋아요가 없습니다")
         );
         userLikeRepository.delete(userLike);
+    }
+
+    public List<UserLike> getUserLike(UserLikeRequestDto userLikeRequestDto) {
+        return userLikeRepository.findAllByUserLikeTypeAndTypeId(userLikeRequestDto.getUserLikeType(), userLikeRequestDto.getTypeId()).orElseThrow(
+                () -> new NullPointerException("등록된 좋아요가 없습니다")
+        );
     }
 }

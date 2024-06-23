@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/like")
@@ -47,6 +49,17 @@ public class UserLikeController {
                 ResponseDto.builder()
                         .status(HttpStatus.OK)
                         .message("좋아요 취소 완료")
+                        .build());
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseDto> getUserLike(@RequestBody UserLikeRequestDto userLikeRequestDto) {
+        List<UserLike> userLikeList = userLikeService.getUserLike(userLikeRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ResponseDto.builder()
+                        .status(HttpStatus.OK)
+                        .message("좋아요 조회 성공")
+                        .data(userLikeList)
                         .build());
     }
 }
