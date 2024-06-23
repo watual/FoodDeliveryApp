@@ -89,4 +89,16 @@ public class ReviewService {
                 requestDto.getRate());
         return review;
     }
+
+    public void deleteReview(User tempUser, Long reviewId) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(
+                () -> new NullPointerException("존재하지 않는 리뷰입니다")
+        );
+
+        if(!Objects.equals(review.getUser().getUserId(), tempUser.getUserId())) {
+            throw new UserMismatchException("접근 권한이 없습니다");
+        }
+
+        reviewRepository.delete(review);
+    }
 }
