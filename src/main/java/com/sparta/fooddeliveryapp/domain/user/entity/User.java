@@ -1,7 +1,6 @@
 package com.sparta.fooddeliveryapp.domain.user.entity;
 
 
-import com.fasterxml.jackson.databind.annotation.EnumNaming;
 import com.sparta.fooddeliveryapp.global.common.TimeStamped;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
