@@ -3,6 +3,7 @@ package com.sparta.fooddeliveryapp.domain.review.service;
 import com.sparta.fooddeliveryapp.domain.order.entity.Orders;
 import com.sparta.fooddeliveryapp.domain.order.repository.OrderRepository;
 import com.sparta.fooddeliveryapp.domain.review.dto.ReviewCreateRequestDto;
+import com.sparta.fooddeliveryapp.domain.review.dto.ReviewResponseDto;
 import com.sparta.fooddeliveryapp.domain.review.entity.Review;
 import com.sparta.fooddeliveryapp.domain.review.repository.ReviewRepository;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
@@ -10,9 +11,12 @@ import com.sparta.fooddeliveryapp.global.error.exception.InsufficientOrdersExcep
 import com.sparta.fooddeliveryapp.global.error.exception.ReviewException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -49,5 +53,21 @@ public class ReviewService {
 
         reviewRepository.save(review);
         log.info("Complete createReview Service");
+    }
+
+    public ResponseEntity<List<ReviewResponseDto>> getReviews(User user) {
+        List<Review> myReviewList = reviewRepository.findAllByUser(user).orElseThrow(
+                () -> new NullPointerException("작성한 리뷰가 없습니다")
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(myReviewList.stream().map(
+                review -> ReviewResponseDto.builder()
+                        .reviewId(review.getReviewId())
+                        .userName(review.getUser().getName())
+                        .ordersId(review.getOrdersId())
+                        .content(review.getContent())
+                        .rate(review.getRate())
+                        .build()
+                        ).toList()
+        );
     }
 }
