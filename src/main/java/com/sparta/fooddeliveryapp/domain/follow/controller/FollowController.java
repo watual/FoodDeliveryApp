@@ -10,10 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,6 +30,20 @@ public class FollowController {
             @RequestBody FollowRequestDto followRequestDto
     ) {
         Follow follow = followService.addUserLike(getTempUser(), followRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ResponseDto.builder()
+                        .status(HttpStatus.OK)
+                        .message("좋아요 완료")
+                        .data(follow)
+                        .build());
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ResponseDto> deleteFollow(
+            //@AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody FollowRequestDto followRequestDto
+    ) {
+        followService.deleteFollow(getTempUser(), followRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
                         .status(HttpStatus.OK)

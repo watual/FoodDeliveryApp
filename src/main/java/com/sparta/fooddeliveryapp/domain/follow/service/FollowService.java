@@ -10,6 +10,7 @@ import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.global.error.exception.DuplicateLikeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +23,6 @@ public class FollowService {
         Store store = storeRepository.findById(followRequestDto.getStoreId()).orElseThrow(
                 () -> new NullPointerException("없는 매장입니다")
         );
-
         if(followRepository.existsByUserAndStore(user, store)){
             throw new DuplicateLikeException("이미 팔로우 중 입니다");
         }
@@ -31,5 +31,16 @@ public class FollowService {
                         .store(store)
                         .user(user)
                         .build());
+    }
+
+    @Transactional
+    public void deleteFollow(User user, FollowRequestDto followRequestDto) {
+        Store store = storeRepository.findById(followRequestDto.getStoreId()).orElseThrow(
+                () -> new NullPointerException("없는 매장입니다")
+        );
+        Follow follow = followRepository.findByUserAndStore(user, store).orElseThrow(
+                () -> new DuplicateLikeException("팔로우 상태가 아닙니다")
+        );
+        followRepository.delete(follow);
     }
 }
