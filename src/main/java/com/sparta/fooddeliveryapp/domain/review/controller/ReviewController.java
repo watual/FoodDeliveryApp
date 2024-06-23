@@ -61,4 +61,18 @@ public class ReviewController {
                         .data(review)
                         .build());
     }
+
+    @DeleteMapping
+    public ResponseEntity<ResponseDto> deleteReview(
+//            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam Long reviewId
+    ) {
+        reviewService.deleteReview(getTempUser(), reviewId);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ResponseDto.builder()
+                        .status(HttpStatus.OK)
+                        .message("리뷰 삭제 완료")
+                        .build()
+        );
+    }
 }
