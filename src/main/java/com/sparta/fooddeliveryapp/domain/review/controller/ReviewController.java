@@ -2,16 +2,15 @@ package com.sparta.fooddeliveryapp.domain.review.controller;
 
 import com.sparta.fooddeliveryapp.domain.review.dto.ReviewCreateRequestDto;
 import com.sparta.fooddeliveryapp.domain.review.dto.ReviewResponseDto;
+import com.sparta.fooddeliveryapp.domain.review.dto.ReviewUpdateRequestDto;
+import com.sparta.fooddeliveryapp.domain.review.entity.Review;
 import com.sparta.fooddeliveryapp.domain.review.service.ReviewService;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
-import com.sparta.fooddeliveryapp.domain.user.entity.UserRoleEnum;
 import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
-import com.sparta.fooddeliveryapp.global.security.UserDetailsImpl;
+import com.sparta.fooddeliveryapp.global.common.ResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,16 +24,22 @@ public class ReviewController {
 
     // 임시 user 생성
     private final UserRepository userRepository;
+
     private User getTempUser() {
         return userRepository.findById(1L).orElse(null);
     }
 
     @PostMapping
-    public ResponseEntity<String> createReview(
+    public ResponseEntity<ResponseDto> createReview(
 //            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody ReviewCreateRequestDto requestDto) {
-        reviewService.createReview(getTempUser(), requestDto);
-        return ResponseEntity.status(HttpStatus.OK).body("리뷰 등록 완료");
+        Review review = reviewService.createReview(getTempUser(), requestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ResponseDto.builder()
+                        .status(HttpStatus.OK)
+                        .message("리뷰 등록 완료")
+                        .data(review)
+                        .build());
     }
 
     @GetMapping
@@ -42,5 +47,18 @@ public class ReviewController {
 //            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         return reviewService.getReviews(getTempUser());
+    }
+
+    @PatchMapping
+    public ResponseEntity<ResponseDto> updateReview(
+//            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody ReviewUpdateRequestDto requestDto) {
+        Review review = reviewService.updateReview(getTempUser(), requestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ResponseDto.builder()
+                        .status(HttpStatus.OK)
+                        .message("리뷰 수정 완료")
+                        .data(review)
+                        .build());
     }
 }
