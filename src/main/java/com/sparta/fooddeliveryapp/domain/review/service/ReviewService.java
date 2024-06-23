@@ -4,11 +4,13 @@ import com.sparta.fooddeliveryapp.domain.order.entity.Orders;
 import com.sparta.fooddeliveryapp.domain.order.repository.OrderRepository;
 import com.sparta.fooddeliveryapp.domain.review.dto.ReviewCreateRequestDto;
 import com.sparta.fooddeliveryapp.domain.review.dto.ReviewResponseDto;
+import com.sparta.fooddeliveryapp.domain.review.dto.ReviewUpdateRequestDto;
 import com.sparta.fooddeliveryapp.domain.review.entity.Review;
 import com.sparta.fooddeliveryapp.domain.review.repository.ReviewRepository;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.global.error.exception.InsufficientOrdersException;
 import com.sparta.fooddeliveryapp.global.error.exception.ReviewException;
+import com.sparta.fooddeliveryapp.global.error.exception.UserMismatchException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,7 +30,7 @@ public class ReviewService {
     private final OrderRepository orderRepository;
 
     @Transactional
-    public void createReview(User user, ReviewCreateRequestDto requestDto) {
+    public Review createReview(User user, ReviewCreateRequestDto requestDto) {
         Long orderId = requestDto.getOrdersId();
         // 주문내역 조회
         Orders orders = orderRepository.findById(orderId).orElseThrow(
@@ -53,6 +55,7 @@ public class ReviewService {
 
         reviewRepository.save(review);
         log.info("Complete createReview Service");
+        return review;
     }
 
     public ResponseEntity<List<ReviewResponseDto>> getReviews(User user) {
@@ -69,5 +72,21 @@ public class ReviewService {
                         .build()
                         ).toList()
         );
+    }
+
+    @Transactional
+    public Review updateReview(User tempUser, ReviewUpdateRequestDto requestDto) {
+        Review review = reviewRepository.findById(requestDto.getReviewId()).orElseThrow(
+                () -> new NullPointerException("존재하지 않는 리뷰입니다")
+        );
+
+        if(!Objects.equals(review.getUser().getUserId(), tempUser.getUserId())) {
+            throw new UserMismatchException("접근 권한이 없습니다");
+        }
+
+        review.update(
+                requestDto.getContent(),
+                requestDto.getRate());
+        return review;
     }
 }

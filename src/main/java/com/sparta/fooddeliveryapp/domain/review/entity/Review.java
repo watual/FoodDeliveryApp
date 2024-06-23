@@ -36,4 +36,9 @@ public class Review extends TimeStamped {
 
     @Column
     private Long rate;
+
+    public void update(String content, Long rate) {
+        this.content = content;
+        this.rate = rate;
+    }
 }
