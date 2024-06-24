@@ -34,9 +34,15 @@ public class OrderDetail {
 
     private Integer count;
 
+    private Integer price;
+
+    private String menuName;
+
     public OrderDetail(Orders orders, Menu menu, Integer count) {
         this.orders = orders;
         this.menu = menu;
         this.count = count;
+        this.menuName = menu.getMenuName();
+        this.price = menu.getPrice();
     }
 }

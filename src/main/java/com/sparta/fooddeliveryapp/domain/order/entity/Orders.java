@@ -29,7 +29,7 @@ public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private Long orderId;
+    private Long ordersId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)
@@ -41,6 +41,8 @@ public class Orders {
 
     private Integer totalPrice;
 
+    private String storeName;
+
     @CreatedDate
     @Column(updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -50,6 +52,7 @@ public class Orders {
         this.store = store;
         this.user = user;
         this.totalPrice = totalPrice;
+        this.storeName = store.getStoreName();
     }
 
 

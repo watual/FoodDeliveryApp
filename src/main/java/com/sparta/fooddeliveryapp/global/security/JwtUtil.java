@@ -116,4 +116,8 @@ public class JwtUtil {
     public String getUsername(String token) {
         return extractAllClaims(token).getSubject();
     }
+//     public Claims extractAllClaims(String token) {
+//         return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+//     }
+
 }
