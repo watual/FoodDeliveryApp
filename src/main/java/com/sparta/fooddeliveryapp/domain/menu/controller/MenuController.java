@@ -4,6 +4,7 @@ import com.sparta.fooddeliveryapp.domain.menu.dto.MenuRequestDto;
 import com.sparta.fooddeliveryapp.domain.menu.dto.MenuResponseDto;
 import com.sparta.fooddeliveryapp.domain.menu.entity.Menu;
 import com.sparta.fooddeliveryapp.domain.menu.service.MenuService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,10 +15,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/menu")
 public class MenuController {
-    @Autowired
-    private MenuService menuService;
+
+    private final MenuService menuService;
 
     // 해당 매장에 특정 메뉴를 조회함
     @GetMapping
@@ -33,7 +35,7 @@ public class MenuController {
         }
 
         List<MenuResponseDto> response = menuPage.stream().map(menu -> new MenuResponseDto(
-                menu.getStoreId(),
+                menu.getStore().getStoreId(),
                 menu.getMenuId(),
                 menu.getMenuName(),
                 menu.getIntro(),

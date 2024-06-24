@@ -8,9 +8,11 @@ import com.sparta.fooddeliveryapp.domain.review.service.ReviewService;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
 import com.sparta.fooddeliveryapp.global.common.ResponseDto;
+import com.sparta.fooddeliveryapp.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,18 +24,11 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    // 임시 user 생성
-    private final UserRepository userRepository;
-
-    private User getTempUser() {
-        return userRepository.findById(1L).orElse(null);
-    }
-
     @PostMapping
     public ResponseEntity<ResponseDto> createReview(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody ReviewCreateRequestDto requestDto) {
-        Review review = reviewService.createReview(getTempUser(), requestDto);
+        Review review = reviewService.createReview(userDetails.getUser(), requestDto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
                         .status(HttpStatus.OK)
@@ -43,17 +38,18 @@ public class ReviewController {
     }
 
     @GetMapping
+    @ResponseBody
     public ResponseEntity<List<ReviewResponseDto>> getReviews(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        return reviewService.getReviews(getTempUser());
+        return reviewService.getReviews(userDetails.getUser());
     }
 
     @PatchMapping
     public ResponseEntity<ResponseDto> updateReview(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody ReviewUpdateRequestDto requestDto) {
-        Review review = reviewService.updateReview(getTempUser(), requestDto);
+        Review review = reviewService.updateReview(userDetails.getUser(), requestDto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
                         .status(HttpStatus.OK)
@@ -64,10 +60,10 @@ public class ReviewController {
 
     @DeleteMapping
     public ResponseEntity<ResponseDto> deleteReview(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestParam Long reviewId
     ) {
-        reviewService.deleteReview(getTempUser(), reviewId);
+        reviewService.deleteReview(userDetails.getUser(), reviewId);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
                         .status(HttpStatus.OK)

@@ -4,10 +4,12 @@ import com.sparta.fooddeliveryapp.domain.cart.dto.CartListResponseDto;
 import com.sparta.fooddeliveryapp.domain.cart.dto.CartRequestDto;
 import com.sparta.fooddeliveryapp.domain.cart.entity.Cart;
 import com.sparta.fooddeliveryapp.domain.cart.service.CartService;
+import com.sparta.fooddeliveryapp.global.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,9 +34,12 @@ public class CartController {
     }
 
     @DeleteMapping
-    public ResponseEntity<String> deleteCart(@RequestParam Long cartId) {
+    public ResponseEntity<String> deleteCart(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam Long cartId
+    ) {
 
-        cartService.deleteCart(cartId);
+        cartService.deleteCart(userDetails.getUser().getUserId(), cartId);
 
         return ResponseEntity.status(HttpStatus.OK).body("메뉴삭제 완료");
     }
@@ -42,9 +47,10 @@ public class CartController {
     @GetMapping
     public ResponseEntity<CartListResponseDto> getCart(
         @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "5") int size) {
-
-        CartListResponseDto cartItems = cartService.getCart(page, size);
+        @RequestParam(defaultValue = "5") int size,
+        @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        CartListResponseDto cartItems = cartService.getCart(page, size, userDetails.getUser());
 
         return ResponseEntity.status(HttpStatus.OK).body(cartItems);
     }

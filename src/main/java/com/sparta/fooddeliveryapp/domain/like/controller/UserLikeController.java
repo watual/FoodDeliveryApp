@@ -7,9 +7,11 @@ import com.sparta.fooddeliveryapp.domain.like.service.UserLikeService;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
 import com.sparta.fooddeliveryapp.global.common.ResponseDto;
+import com.sparta.fooddeliveryapp.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,17 +23,12 @@ public class UserLikeController {
 
     private final UserLikeService userLikeService;
 
-    // 임시 user 생성
-    private final UserRepository userRepository;
-    private final UserLikeRepository userLikeRepository;
-
-    private User getTempUser() {
-        return userRepository.findById(1L).orElse(null);
-    }
-
     @PostMapping
-    public ResponseEntity<ResponseDto> addUserLike(@RequestBody UserLikeRequestDto userLikeRequestDto) {
-        UserLike userLike = userLikeService.addUserLike(getTempUser(), userLikeRequestDto);
+    public ResponseEntity<ResponseDto> addUserLike(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody UserLikeRequestDto userLikeRequestDto
+    ) {
+        UserLike userLike = userLikeService.addUserLike(userDetails.getUser(), userLikeRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
                         .status(HttpStatus.OK)
@@ -41,10 +38,10 @@ public class UserLikeController {
 
     @DeleteMapping
     public ResponseEntity<ResponseDto> deleteUserLike(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody UserLikeRequestDto userLikeRequestDto
     ) {
-        userLikeService.deleteUserLike(getTempUser(), userLikeRequestDto);
+        userLikeService.deleteUserLike(userDetails.getUser(), userLikeRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
                         .status(HttpStatus.OK)

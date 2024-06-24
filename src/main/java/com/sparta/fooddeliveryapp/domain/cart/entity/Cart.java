@@ -36,16 +36,11 @@ public class Cart {
     private Store store;
 
     @ManyToOne
-    @JoinColumn(name = "menu_id", nullable = false)
-    private Menu menu;
-
-    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Cart(Store store, Menu menu, User user) {
+    public Cart(Store store, User user) {
         this.store = store;
-        this.menu = menu;
         this.user = user;
     }
 

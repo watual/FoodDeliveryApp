@@ -97,19 +97,39 @@ public class UserService {
     }
 
     @Transactional
-    public void updateProfile(UpdateProfileRequestDto requestDto, User user) {
-        User tempUser = loadUserByLoginId(user.getLoginId());
-        if(requestDto.getName() != null) {
-            tempUser.updateName(requestDto.getName());
-        }
-        if(requestDto.getNickname() != null) {
-            tempUser.updateNickname(requestDto.getNickname());
-        }
-        if(requestDto.getAddress() != null) {
-            tempUser.updateAddress(requestDto.getAddress());
-        }
-        if(requestDto.getIntro() != null) {
-            tempUser.updateIntro(requestDto.getIntro());
+    public void updateProfile(UpdateProfileRequestDto requestDto, User user, Long userId) {
+        // 어드민 및 일반 사용자의 권한 확인 : 아무나 수정 vs 본인만 수정
+        if(user.getRole().equals(UserRoleEnum.ADMIN)){
+            User userToUpdate = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+            if(requestDto.getName() != null) {
+                userToUpdate.updateName(requestDto.getName());
+            }
+            if(requestDto.getNickname() != null) {
+                userToUpdate.updateNickname(requestDto.getNickname());
+            }
+            if(requestDto.getAddress() != null) {
+                userToUpdate.updateAddress(requestDto.getAddress());
+            }
+            if(requestDto.getIntro() != null) {
+                userToUpdate.updateIntro(requestDto.getIntro());
+            }
+        }else {
+            if(!user.getUserId().equals(userId)){
+                throw new UserAuthorityDeniedException();
+            }
+            User selfUpdateUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+            if (requestDto.getName() != null) {
+                selfUpdateUser.updateName(requestDto.getName());
+            }
+            if (requestDto.getNickname() != null) {
+                selfUpdateUser.updateNickname(requestDto.getNickname());
+            }
+            if (requestDto.getAddress() != null) {
+                selfUpdateUser.updateAddress(requestDto.getAddress());
+            }
+            if (requestDto.getIntro() != null) {
+                selfUpdateUser.updateIntro(requestDto.getIntro());
+            }
         }
         log.info("profile updated");
     }
@@ -147,8 +167,11 @@ public class UserService {
     }
 
     @Transactional
-    public void logout(User user) {
+    public void logout(Long userId) {
         // 전에 만들었던 내용 없애고 유저의 refresh token 만 Null 처리한다. -> Auth filter 에서 로그아웃 유저 거르기 위함
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NullPointerException("존재하지 않는 사용자입니다")
+        );
         user.setRefreshToken(null);
         log.info("logout success");
     }

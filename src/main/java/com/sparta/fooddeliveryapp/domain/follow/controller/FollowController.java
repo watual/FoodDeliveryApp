@@ -6,10 +6,12 @@ import com.sparta.fooddeliveryapp.domain.follow.service.FollowService;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
 import com.sparta.fooddeliveryapp.global.common.ResponseDto;
+import com.sparta.fooddeliveryapp.global.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,17 +24,12 @@ public class FollowController {
 
     private final FollowService followService;
 
-    private final UserRepository userRepository;
-    private User getTempUser() {
-        return userRepository.findById(1L).orElse(null);
-    }
-
     @PostMapping
     public ResponseEntity<ResponseDto> addFollow(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody FollowRequestDto followRequestDto
     ) {
-        Follow follow = followService.addUserLike(getTempUser(), followRequestDto);
+        Follow follow = followService.addUserLike(userDetails.getUser(), followRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
                         .status(HttpStatus.OK)

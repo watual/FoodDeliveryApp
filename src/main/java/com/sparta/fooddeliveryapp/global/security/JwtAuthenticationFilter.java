@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     throw new DeactivatedUserException();
                 }
             }
-
+            log.info(requestDto.getLoginId() + " : " + requestDto.getPassword());
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
                             requestDto.getLoginId(),

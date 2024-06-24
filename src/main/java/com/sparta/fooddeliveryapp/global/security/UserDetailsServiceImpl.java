@@ -19,11 +19,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
         User user = userRepository.findByLoginId(loginId).orElseThrow(
                 () -> new UsernameNotFoundException("Not Found : " + loginId)
         );
-        // 로그아웃 된 유저 걸러내기, 로그아웃 하면 accesstoken 살아있어도 인가 막아버림
-        if(user.getRefreshToken() == null){
-            throw new LoggedOutUserException();
-        }
-
         return new UserDetailsImpl(user);
     }
 }

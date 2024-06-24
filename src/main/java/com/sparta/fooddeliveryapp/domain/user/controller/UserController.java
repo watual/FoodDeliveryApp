@@ -1,11 +1,16 @@
 package com.sparta.fooddeliveryapp.domain.user.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparta.fooddeliveryapp.domain.user.dto.*;
+import com.sparta.fooddeliveryapp.domain.user.service.KakaoService;
 import com.sparta.fooddeliveryapp.domain.user.service.UserService;
+import com.sparta.fooddeliveryapp.global.security.JwtUtil;
 import com.sparta.fooddeliveryapp.global.security.UserDetailsImpl;
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -32,13 +38,12 @@ public class UserController {
     @PutMapping("/deactivate")
     public ResponseEntity<String> deactivateUser(@RequestBody DeactivateRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         userService.deactivateUser(requestDto, userDetails.getUser());
-        // 로그아웃 시키기
         return ResponseEntity.status(HttpStatus.OK).body("회원 비활성화 완료");
     }
 
-    @PatchMapping("/update-profile")
-    public ResponseEntity<String> updateProfile(@RequestBody UpdateProfileRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        userService.updateProfile(requestDto, userDetails.getUser());
+    @PatchMapping("/update-profile/{userId}")
+    public ResponseEntity<String> updateProfile(@RequestBody UpdateProfileRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long userId){
+        userService.updateProfile(requestDto, userDetails.getUser(), userId);
         return ResponseEntity.status(HttpStatus.OK).body("프로필 수정 완료");
     }
 
@@ -62,7 +67,7 @@ public class UserController {
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
-        userService.logout(userDetails.getUser());
+        userService.logout(userDetails.getUser().getUserId());
         return ResponseEntity.status(HttpStatus.OK).body("로그아웃 완료");
     }
   
@@ -82,15 +87,4 @@ public class UserController {
     public String kakaoLoginPage() {
         return "https://kauth.kakao.com/oauth/authorize?client_id=6bd39095290563c7275db8ec2daeda3b&redirect_uri=http://localhost:8080/api/user/kakao/callback&response_type=code";
     }
-    @GetMapping("/kakao1")
-    public String kakaoLoginPage1() {
-        return "https://kauth.kakao.com/oauth/authorize?client_id=6bd39095290563c7275db8ec2daeda3b&redirect_uri=http://localhost:8080/api/user/kakao/callback&response_type=code";
-    }
-    @GetMapping("/kakao2")
-    public String kakaoLoginPage2() {
-        log.info("asdfasdfasdfasdfasdf");
-        return "https://kauth.kakao.com/oauth/authorize?client_id=6bd39095290563c7275db8ec2daeda3b&redirect_uri=http://localhost:8080/api/user/kakao/callback&response_type=code";
-    }
-
-
 }

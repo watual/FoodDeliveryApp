@@ -77,7 +77,7 @@ public class StoreService {
     public boolean isOwner(String token) {
         try {
             String username = jwtUtil.getUsername(token);
-            User user = userRepository.findByUsername(username)
+            User user = userRepository.findByName(username)
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             return "OWNER".equals(user.getRole());
@@ -88,7 +88,7 @@ public class StoreService {
 
     public User getUserFromToken(String token) {
         String username = jwtUtil.getUsername(token);
-        return userRepository.findByUsername(username)
+        return userRepository.findByName(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 

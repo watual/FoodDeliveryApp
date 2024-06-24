@@ -45,7 +45,6 @@ public class OrderController {
                 size);
 
         return ResponseEntity.status(HttpStatus.OK).body(orderList);
-
     }
 
 }
