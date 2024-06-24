@@ -60,6 +60,20 @@ public class StoreService {
         }
     }
 
+    public void deleteStore(Long storeId, User user) {
+        Optional<Store> optionalStore = storeRepository.findById(storeId);
+        if (optionalStore.isPresent()) {
+            Store store = optionalStore.get();
+            if (store.getUser().equals(user)) {
+                storeRepository.delete(store);
+            } else {
+                throw new RuntimeException("점주만 매장을 삭제할 수 있습니다.");
+            }
+        } else {
+            throw new RuntimeException("매장을 찾을 수 없습니다.");
+        }
+    }
+
     public boolean isOwner(String token) {
         try {
             String username = jwtUtil.getUsername(token);

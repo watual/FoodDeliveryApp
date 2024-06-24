@@ -99,4 +99,22 @@ public class StoreController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 토큰입니다.");
         }
     }
+
+    // 매장 삭제 (점주 유저)
+    @DeleteMapping("/{storeId}")
+    public ResponseEntity<?> deleteStore(
+            @RequestHeader("Authorization") String token,
+            @PathVariable Long storeId) {
+        try {
+            boolean isOwner = storeService.isOwner(token);
+            if (!isOwner) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("점주만 매장을 삭제할 수 있습니다.");
+            }
+            User user = storeService.getUserFromToken(token);
+            storeService.deleteStore(storeId, user);
+            return ResponseEntity.status(HttpStatus.OK).body("매장삭제 완료");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 토큰입니다.");
+        }
+    }
 }
