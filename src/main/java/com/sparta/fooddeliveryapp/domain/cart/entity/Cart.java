@@ -27,7 +27,7 @@ import org.springframework.data.annotation.CreatedDate;
 public class Cart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long cartId;
 
