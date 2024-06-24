@@ -1,4 +1,4 @@
-package com.sparta.fooddeliveryapp.global.exception;
+package com.sparta.fooddeliveryapp.global.error.exception;
 
 public class DuplicateEmailException extends IllegalArgumentException {
     public DuplicateEmailException() {

@@ -3,6 +3,7 @@ package com.sparta.fooddeliveryapp.domain.cart.entity;
 import com.sparta.fooddeliveryapp.domain.menu.entity.Menu;
 import com.sparta.fooddeliveryapp.domain.store.entity.Store;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
+import com.sparta.fooddeliveryapp.global.common.TimeStamped;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,7 +25,7 @@ import org.springframework.data.annotation.CreatedDate;
 @Getter
 @NoArgsConstructor
 @Table(name = "cart")
-public class Cart {
+public class Cart extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

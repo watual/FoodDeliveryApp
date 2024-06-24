@@ -18,5 +18,6 @@ public class CartResponseDto {
 
     private String storeName;
     // 장바구니 1개에 메뉴 여러개
-    private List<Menu> menuList;
+    private List<CartDetailResponseDto> cartDetailList;
+//    private List<Menu> menuList;
 }

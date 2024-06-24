@@ -3,6 +3,7 @@ package com.sparta.fooddeliveryapp.domain.order.controller;
 import com.sparta.fooddeliveryapp.domain.order.dto.OrderRequestDto;
 import com.sparta.fooddeliveryapp.domain.order.dto.OrderResponseDto;
 import com.sparta.fooddeliveryapp.domain.order.service.OrderService;
+import com.sparta.fooddeliveryapp.global.common.ResponseDto;
 import com.sparta.fooddeliveryapp.global.security.UserDetailsImpl;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -24,13 +25,20 @@ public class OrderController {
     public final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity order(@AuthenticationPrincipal UserDetailsImpl userDetails,
-        @RequestBody OrderRequestDto orderRequserDto) {
+    public ResponseEntity<ResponseDto> order(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody OrderRequestDto orderRequestDto
+    ) {
         // 로그인한 사람의 ID
-        Long userId = userDetails.getUser().getUserId();
-        orderService.order(userId, orderRequserDto);
+        orderService.order(
+                userDetails.getUser(),
+                orderRequestDto.getCartId());
 
-        return ResponseEntity.ok("주문 생성 완료");
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ResponseDto.builder()
+                        .status(HttpStatus.OK)
+                        .message("주문 생성 완료")
+                        .build());
     }
 
     @GetMapping
@@ -40,7 +48,7 @@ public class OrderController {
         @RequestParam(defaultValue = "5") int size){
 
         List<OrderResponseDto> orderList = orderService.getOrderList(
-                userDetails.getUser().getUserId(),
+                userDetails.getUser(),
                 page,
                 size);
 

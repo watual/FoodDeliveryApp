@@ -1,8 +1,8 @@
 package com.sparta.fooddeliveryapp.global.security;
 
 import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
-import com.sparta.fooddeliveryapp.global.exception.LoggedOutUserException;
-import com.sparta.fooddeliveryapp.global.exception.UserNotFoundException;
+import com.sparta.fooddeliveryapp.global.error.exception.LoggedOutUserException;
+import com.sparta.fooddeliveryapp.global.error.exception.UserNotFoundException;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

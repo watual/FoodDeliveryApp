@@ -5,6 +5,7 @@ import com.sparta.fooddeliveryapp.domain.store.dto.StoreResponseDto;
 import com.sparta.fooddeliveryapp.domain.store.entity.Store;
 import com.sparta.fooddeliveryapp.domain.store.service.StoreService;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
+import com.sparta.fooddeliveryapp.global.common.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -66,39 +67,35 @@ public class StoreController {
     // 매장 등록 (점주 유저)
     @PostMapping
     public ResponseEntity<?> createStore(
-            @RequestHeader("Authorization") String token,
-            @RequestBody StoreRequestDto storeRequestDto) {
+            @RequestHeader("Authorization") String token, @RequestBody StoreRequestDto storeRequestDto) {
         String accessToken = token.substring(7);
-        try {
-            boolean isOwner = storeService.isOwner(accessToken);
-            if (!isOwner) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("점주만 매장을 등록할 수 있습니다.");
-            }
-            User user = storeService.getUserFromToken(accessToken);
-            storeService.createStore(storeRequestDto, user);
-            return ResponseEntity.status(HttpStatus.OK).body("매장등록 완료");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 토큰입니다.");
-        }
+        storeService.isOwner(accessToken);
+
+        User user = storeService.getUserFromToken(accessToken);
+        storeService.createStore(storeRequestDto, user);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ResponseDto.builder()
+                        .status(HttpStatus.OK)
+                        .message("매장등록 완료")
+                        .build());
     }
 
-    // 매장 수저 (점주 유저)
-    @PutMapping("/{storeId}")
-    public ResponseEntity<?> updateStore(
+    // 매장 수정 (점주 유저)
+    @PatchMapping("/{storeId}")
+    public ResponseEntity<ResponseDto> updateStore(
             @RequestHeader("Authorization") String token,
             @PathVariable Long storeId,
             @RequestBody StoreRequestDto storeRequestDto) {
-        try {
-            boolean isOwner = storeService.isOwner(token);
-            if (!isOwner) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("점주만 매장을 수정할 수 있습니다.");
-            }
-            User user = storeService.getUserFromToken(token);
-            storeService.updateStore(storeId, storeRequestDto, user);
-            return ResponseEntity.status(HttpStatus.OK).body("매장수정 완료");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 토큰입니다.");
-        }
+        String accessToken = token.substring(7);
+        storeService.isOwner(accessToken);
+
+        User user = storeService.getUserFromToken(token);
+        storeService.updateStore(storeId, storeRequestDto, user);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                    ResponseDto.builder()
+                            .status(HttpStatus.OK)
+                            .message("매장수정 완료")
+                            .build());
     }
 
     // 매장 삭제 (점주 유저)
@@ -106,16 +103,15 @@ public class StoreController {
     public ResponseEntity<?> deleteStore(
             @RequestHeader("Authorization") String token,
             @PathVariable Long storeId) {
-        try {
-            boolean isOwner = storeService.isOwner(token);
-            if (!isOwner) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("점주만 매장을 삭제할 수 있습니다.");
-            }
-            User user = storeService.getUserFromToken(token);
-            storeService.deleteStore(storeId, user);
-            return ResponseEntity.status(HttpStatus.OK).body("매장삭제 완료");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 토큰입니다.");
-        }
+        String accessToken = token.substring(7);
+        storeService.isOwner(accessToken);
+
+        User user = storeService.getUserFromToken(token);
+        storeService.deleteStore(storeId, user);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ResponseDto.builder()
+                        .status(HttpStatus.OK)
+                        .message("매장삭제 완료")
+                        .build());
     }
 }

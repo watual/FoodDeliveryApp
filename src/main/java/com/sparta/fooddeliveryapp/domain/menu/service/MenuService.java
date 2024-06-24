@@ -5,7 +5,7 @@ import com.sparta.fooddeliveryapp.domain.menu.entity.Menu;
 import com.sparta.fooddeliveryapp.domain.menu.repository.MenuRepository;
 import com.sparta.fooddeliveryapp.domain.store.entity.Store;
 import com.sparta.fooddeliveryapp.domain.store.repository.StoreRepository;
-import com.sparta.fooddeliveryapp.global.exception.UserNotFoundException;
+import com.sparta.fooddeliveryapp.global.error.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

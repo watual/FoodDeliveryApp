@@ -6,6 +6,7 @@ import com.sparta.fooddeliveryapp.domain.store.repository.StoreRepository;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.domain.user.entity.UserRoleEnum;
 import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
+import com.sparta.fooddeliveryapp.global.error.exception.UserNotFoundException;
 import com.sparta.fooddeliveryapp.global.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +50,15 @@ public class StoreService {
         if (optionalStore.isPresent()) {
             Store store = optionalStore.get();
             if (store.getUser().equals(user)) {
-                store.setStoreName(storeRequestDto.getStoreName());
-                store.setIntro(storeRequestDto.getIntro());
-                store.setDialNumber(storeRequestDto.getDialNumber());
+                if (storeRequestDto.getStoreName() != null) {
+                    store.setStoreName(storeRequestDto.getStoreName());
+                }
+                if (storeRequestDto.getIntro() != null) {
+                    store.setIntro(storeRequestDto.getIntro());
+                }
+                if (storeRequestDto.getDialNumber() != null) {
+                    store.setDialNumber(storeRequestDto.getDialNumber());
+                }
                 storeRepository.save(store);
             } else {
                 throw new RuntimeException("점주만 매장을 수정할 수 있습니다.");
@@ -75,20 +82,16 @@ public class StoreService {
         }
     }
 
-    public boolean isOwner(String token) {
-        String loginId = jwtUtil.extractLoginId(token);
-        User user = userRepository.findByLoginId(loginId)
-                .orElseThrow(UserNotFoundException::new);
-
-        return user.getRole().equals(UserRoleEnum.SELLER);
+    public void isOwner(String token) {
+        User user = getUserFromToken(token);
+        if(!user.getRole().equals(UserRoleEnum.SELLER)){
+            throw new IllegalArgumentException("해당 유저는 점주가 아닙니다.");
+        }
     }
 
     public User getUserFromToken(String token) {
         String loginId = jwtUtil.extractLoginId(token);
-        User user = userRepository.findByLoginId(loginId)
+        return userRepository.findByLoginId(loginId)
                 .orElseThrow(UserNotFoundException::new);
     }
-
-
-
 }

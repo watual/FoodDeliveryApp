@@ -21,4 +21,9 @@ public class CartDetail {
     @ManyToOne
     @JoinColumn(name = "menu_id", nullable = false)
     private Menu menu;
+
+    public CartDetail(Cart cart, Menu menu) {
+        this.cart = cart;
+        this.menu = menu;
+    }
 }

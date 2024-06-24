@@ -6,7 +6,7 @@ import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.domain.user.entity.UserRoleEnum;
 import com.sparta.fooddeliveryapp.domain.user.entity.UserStatusEnum;
 import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
-import com.sparta.fooddeliveryapp.global.exception.DeactivatedUserException;
+import com.sparta.fooddeliveryapp.global.error.exception.DeactivatedUserException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package com.sparta.fooddeliveryapp.global.exception;
+package com.sparta.fooddeliveryapp.global.error.exception;
 
 public class DuplicateLoginIdException extends IllegalArgumentException {
     public DuplicateLoginIdException() {

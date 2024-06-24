@@ -1,4 +1,4 @@
-package com.sparta.fooddeliveryapp.global.exception;
+package com.sparta.fooddeliveryapp.global.error.exception;
 
 // 로그아웃된 유저 걸러내는 예외
 public class LoggedOutUserException extends IllegalArgumentException{

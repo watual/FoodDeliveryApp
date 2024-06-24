@@ -4,6 +4,7 @@ import com.sparta.fooddeliveryapp.domain.cart.dto.CartListResponseDto;
 import com.sparta.fooddeliveryapp.domain.cart.dto.CartRequestDto;
 import com.sparta.fooddeliveryapp.domain.cart.entity.Cart;
 import com.sparta.fooddeliveryapp.domain.cart.service.CartService;
+import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.global.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,12 +27,26 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping
-    public ResponseEntity<String> createCart(@RequestParam Long cartId, @RequestBody CartRequestDto requestDto) {
+    public ResponseEntity<String> createCart(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam Long storeId
+    ) {
 
-        cartService.createCart(cartId, requestDto);
+        cartService.createCart(userDetails.getUser(), storeId);
 
-        return ResponseEntity.status(HttpStatus.OK).body("장바구니 담기 완료");
+        return ResponseEntity.status(HttpStatus.OK).body("장바구니 생성 완료");
     }
+
+    @PostMapping("/add")
+    public ResponseEntity<String> addToCart(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam Long menuId,
+            @RequestParam Long cartId
+            ) {
+        cartService.addToCart(userDetails.getUser(), menuId, cartId);
+        return ResponseEntity.status(HttpStatus.OK).body("장바구니 담기 성공");
+    }
+
 
     @DeleteMapping
     public ResponseEntity<String> deleteCart(

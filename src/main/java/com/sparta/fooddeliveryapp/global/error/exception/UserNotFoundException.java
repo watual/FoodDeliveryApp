@@ -1,4 +1,4 @@
-package com.sparta.fooddeliveryapp.global.exception;
+package com.sparta.fooddeliveryapp.global.error.exception;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 

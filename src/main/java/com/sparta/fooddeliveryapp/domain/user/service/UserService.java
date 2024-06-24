@@ -7,24 +7,17 @@ import com.sparta.fooddeliveryapp.domain.user.entity.UserRoleEnum;
 import com.sparta.fooddeliveryapp.domain.user.entity.UserStatusEnum;
 import com.sparta.fooddeliveryapp.domain.user.repository.UsedPasswordRepository;
 import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
-import com.sparta.fooddeliveryapp.global.exception.*;
+import com.sparta.fooddeliveryapp.global.error.exception.*;
 import com.sparta.fooddeliveryapp.global.security.JwtUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import static org.hibernate.query.results.Builders.fetch;
 
 @Service
 @Slf4j(topic = "UserService")

@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -28,10 +29,6 @@ public class OrderDetail {
     @JoinColumn(name = "order_id", nullable = false)
     private Orders orders;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id", nullable = false)
-    private Menu menu;
-
     private Integer count;
 
     private Integer price;
@@ -40,7 +37,6 @@ public class OrderDetail {
 
     public OrderDetail(Orders orders, Menu menu, Integer count) {
         this.orders = orders;
-        this.menu = menu;
         this.count = count;
         this.menuName = menu.getMenuName();
         this.price = menu.getPrice();

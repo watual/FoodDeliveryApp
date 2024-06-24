@@ -53,7 +53,7 @@ public class MenuController {
     }
 
     // 메뉴 수정 (점주 유저)
-    @PutMapping("/{menuId}")
+    @PatchMapping("/{menuId}")
     public ResponseEntity<?> updateMenu(
             @RequestHeader("Authorization") String token,
             @PathVariable Long menuId,

@@ -13,11 +13,5 @@ import lombok.ToString;
 @ToString
 @Builder
 public class CartRequestDto {
-
     private Long storeId;
-
-    private Long menuId;
-
-    private Long userId;
-
 }
