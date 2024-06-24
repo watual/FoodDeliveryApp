@@ -147,18 +147,9 @@ public class UserService {
     }
 
     @Transactional
-    public void logout(HttpServletRequest request) {
-        String accessToken = request.getHeader("Authorization").substring(7);
-        String refreshToken = request.getHeader("RefreshToken").substring(7);
-
-        User user = loadUserByLoginId(jwtUtil.extractLoginId(accessToken));
-
-        // 서버에서 인증 상태를 초기화
-        LocalDateTime accessExpiration = jwtUtil.extractAllClaims(accessToken).getExpiration().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        LocalDateTime refreshExpiration = jwtUtil.extractAllClaims(refreshToken).getExpiration().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        SecurityContextHolder.clearContext();
+    public void logout(User user) {
+        // 전에 만들었던 내용 없애고 유저의 refresh token 만 Null 처리한다. -> Auth filter 에서 로그아웃 유저 거르기 위함
         user.setRefreshToken(null);
-
         log.info("logout success");
     }
 

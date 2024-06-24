@@ -1,5 +1,6 @@
 package com.sparta.fooddeliveryapp.domain.menu.entity;
 
+import com.sparta.fooddeliveryapp.domain.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +17,9 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long menuId;
 
-    @Column(nullable = false)
-    private Long storeId;
+    @ManyToOne
+    @JoinColumn(name = "store_id", nullable = false)
+    private Store store;
 
     @Column(nullable = false)
     private String menuName;

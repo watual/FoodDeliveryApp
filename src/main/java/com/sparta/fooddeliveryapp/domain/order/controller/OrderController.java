@@ -39,7 +39,10 @@ public class OrderController {
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "5") int size){
 
-        List<OrderResponseDto> orderList = orderService.getOrderList(userDetails.getUser().getUserId());
+        List<OrderResponseDto> orderList = orderService.getOrderList(
+                userDetails.getUser().getUserId(),
+                page,
+                size);
 
         return ResponseEntity.status(HttpStatus.OK).body(orderList);
 

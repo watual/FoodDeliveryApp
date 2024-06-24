@@ -27,7 +27,8 @@ public class OrderResponseDto {
     private LocalDateTime createdAt;
 
     public OrderResponseDto(Orders orders, List<OrderDetailResponseDto> dtoList) {
-        this.orderId = orders.getOrderId();
+        // BUGFIX : OrderId -> OrdersId 리팩토링 미반영 수정
+        this.orderId = orders.getOrdersId();
         this.storeName = orders.getStoreName();
         this.totalPrice = orders.getTotalPrice();
         this.createdAt = orders.getCreatedAt();

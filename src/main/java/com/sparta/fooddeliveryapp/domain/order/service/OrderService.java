@@ -37,15 +37,17 @@ public class OrderService {
     @Transactional
     public void order(Long userId, OrderRequestDto orderRequestDto) {
         //유저 조회
-        User user = userRepository.findById(userId).get();
-
+        User user = userRepository.findById(userId).orElseThrow();
         // 주문메뉴 리스트
         List<OrderDetailRequestDto> orderDetailDtoList = orderRequestDto.getOrderDetailDtoList();
-        Store store = null;
-        if (!orderDetailDtoList.isEmpty()) {
-            Long menuId = orderDetailDtoList.get(0).getMenuId();
-            store = menuRepository.findById(menuId).get().getStoreId();
-        }
+        // 비어있으면 "담은 메뉴가 없습니다!" 오류를 던짐, 있으면 정상로직을 수행
+        if (orderDetailDtoList.isEmpty()) {
+            throw new NullPointerException("장바구니가 비어있습니다.");
+        }   //없으면 로직 수행 안하고 계속~
+        // 없으면, store = null, orderDetailDtoList = null, orders 생성, save
+
+        Long menuId = orderDetailDtoList.get(0).getMenuId();
+        Store store = menuRepository.findById(menuId).orElseThrow().getStore();
 
         Orders orders = new Orders(store, user, orderRequestDto.getTotalPrice());
         //주문 생성
@@ -53,7 +55,7 @@ public class OrderService {
 
         //주문 상세
         for (OrderDetailRequestDto dto : orderDetailDtoList) {
-            Menu menu = menuRepository.findById(dto.getMenuId()).get();
+            Menu menu = menuRepository.findById(dto.getMenuId()).orElseThrow();
             OrderDetail orderDetail = new OrderDetail(orders, menu, dto.getCount());
             orderDetailRepository.save(orderDetail);
         }
@@ -61,7 +63,7 @@ public class OrderService {
 
     public List<OrderResponseDto> getOrderList(Long userId, int page, int size) {
 
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).orElseThrow();
         Pageable pageable = PageRequest.of(page, size);
         Page<Orders> ordersPage = orderRepository.findAllByUserOrderByCreatedAtDesc(user, pageable);
 
@@ -71,7 +73,7 @@ public class OrderService {
         for (Orders orders : ordersPage) {
 
             //이 주문번호에 해당하는 주문상세 리스트 조회하는 메서드가 필요하다.
-            List<OrderDetail> orderDetailList = orderDetailRepository.findAllByOrderId(orders.getOrderId());
+            List<OrderDetail> orderDetailList = orderDetailRepository.findAllByOrderId(orders.getOrdersId());
 
             for (OrderDetail orderDetail : orderDetailList) {
                 orderDetailResponseDtoList.add(new OrderDetailResponseDto(orderDetail));

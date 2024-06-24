@@ -59,8 +59,8 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request) throws IOException {
-        userService.logout(request);
+    public ResponseEntity<String> logout(@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+        userService.logout(userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body("로그아웃 완료");
     }
 
