@@ -5,6 +5,7 @@ import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 @Slf4j(topic = "JwtUtil")
 @Component
+@RequiredArgsConstructor
 public class JwtUtil {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
@@ -26,16 +28,12 @@ public class JwtUtil {
 
     private final long ACCESS_TOKEN_EXPIRATION_TIME = 60 * 60 * 1000L; //60분
     private final long REFRESH_TOKEN_EXPIRATION_TIME = 14 * 24* 60 * 60 * 500L; // 1주
-    private final UserRepository userRepository;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
     private Key key;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
-    public JwtUtil(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @PostConstruct
     public void init() {
@@ -116,8 +114,4 @@ public class JwtUtil {
     public String getUsername(String token) {
         return extractAllClaims(token).getSubject();
     }
-//     public Claims extractAllClaims(String token) {
-//         return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
-//     }
-
 }

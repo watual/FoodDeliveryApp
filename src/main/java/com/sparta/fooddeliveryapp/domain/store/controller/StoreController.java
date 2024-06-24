@@ -68,12 +68,13 @@ public class StoreController {
     public ResponseEntity<?> createStore(
             @RequestHeader("Authorization") String token,
             @RequestBody StoreRequestDto storeRequestDto) {
+        String accessToken = token.substring(7);
         try {
-            boolean isOwner = storeService.isOwner(token);
+            boolean isOwner = storeService.isOwner(accessToken);
             if (!isOwner) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("점주만 매장을 등록할 수 있습니다.");
             }
-            User user = storeService.getUserFromToken(token);
+            User user = storeService.getUserFromToken(accessToken);
             storeService.createStore(storeRequestDto, user);
             return ResponseEntity.status(HttpStatus.OK).body("매장등록 완료");
         } catch (Exception e) {

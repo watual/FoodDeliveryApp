@@ -93,6 +93,7 @@ public class UserService {
             throw new WrongPasswordException();
         }
         tempUser.setStatusDeactivated();
+        tempUser.setRefreshToken(null);
         log.info("user deactivated");
     }
 

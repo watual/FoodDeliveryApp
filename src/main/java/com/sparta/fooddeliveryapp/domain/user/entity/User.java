@@ -3,10 +3,7 @@ package com.sparta.fooddeliveryapp.domain.user.entity;
 
 import com.sparta.fooddeliveryapp.global.common.TimeStamped;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +35,10 @@ public class User extends TimeStamped {
     @Column(name = "nickname", nullable = false)
     private String nickname;
 
-    @Column(name = "address", nullable = false)
+    @Column(name = "address")
     private String address;
 
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone")
     private String phone;
 
     @Column(name = "email", nullable = false)
@@ -60,6 +57,10 @@ public class User extends TimeStamped {
 
     @Column(name = "refresh_token")
     private String refreshToken;
+
+    @Setter
+    @Column(name = "kakao_id")
+    private Long kakaoId;
 
     // image 가져오기
     // 생성 및 수정 시간은 타 클래스 implement 가져오는걸로

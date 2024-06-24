@@ -4,6 +4,7 @@ import com.sparta.fooddeliveryapp.domain.store.dto.StoreRequestDto;
 import com.sparta.fooddeliveryapp.domain.store.entity.Store;
 import com.sparta.fooddeliveryapp.domain.store.repository.StoreRepository;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
+import com.sparta.fooddeliveryapp.domain.user.entity.UserRoleEnum;
 import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
 import com.sparta.fooddeliveryapp.global.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -75,21 +76,17 @@ public class StoreService {
     }
 
     public boolean isOwner(String token) {
-        try {
-            String username = jwtUtil.getUsername(token);
-            User user = userRepository.findByName(username)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+        String loginId = jwtUtil.extractLoginId(token);
+        User user = userRepository.findByLoginId(loginId)
+                .orElseThrow(UserNotFoundException::new);
 
-            return "OWNER".equals(user.getRole());
-        } catch (Exception e) {
-            return false;
-        }
+        return user.getRole().equals(UserRoleEnum.SELLER);
     }
 
     public User getUserFromToken(String token) {
-        String username = jwtUtil.getUsername(token);
-        return userRepository.findByName(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        String loginId = jwtUtil.extractLoginId(token);
+        User user = userRepository.findByLoginId(loginId)
+                .orElseThrow(UserNotFoundException::new);
     }
 
 

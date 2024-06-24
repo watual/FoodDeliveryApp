@@ -9,14 +9,18 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
     Optional<User> findByLoginId(String loginId);
 
-  // createStore 유저 정보 가져오기
+    // createStore 유저 정보 가져오기
     Optional<User> findByName(String name);
 
-     Optional<User> findByPhone(String phone);
+    Optional<User> findByPhone(String phone);
 
-     Optional<User> findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
-     List<User> findAllByNickname(String nickname);
+    List<User> findAllByNickname(String nickname);
+
+    Optional<User> findByKakaoId(Long kakaoId);
+
 }
