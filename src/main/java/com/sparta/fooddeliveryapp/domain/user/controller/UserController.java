@@ -20,6 +20,8 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+  
+    private final KakaoService kakaoService;
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody SignupRequestDto requestDto) {
@@ -62,6 +64,32 @@ public class UserController {
     public ResponseEntity<String> logout(@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         userService.logout(userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body("로그아웃 완료");
+    }
+  
+  @GetMapping("/kakao/callback")
+    public ResponseEntity<String> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        log.info("kakaoLogin");
+        String token = kakaoService.kakaoLogin(code);
+
+        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok().body("로그인 성공");
+    }
+
+    @GetMapping("/kakao")
+    public String kakaoLoginPage() {
+        return "https://kauth.kakao.com/oauth/authorize?client_id=6bd39095290563c7275db8ec2daeda3b&redirect_uri=http://localhost:8080/api/user/kakao/callback&response_type=code";
+    }
+    @GetMapping("/kakao1")
+    public String kakaoLoginPage1() {
+        return "https://kauth.kakao.com/oauth/authorize?client_id=6bd39095290563c7275db8ec2daeda3b&redirect_uri=http://localhost:8080/api/user/kakao/callback&response_type=code";
+    }
+    @GetMapping("/kakao2")
+    public String kakaoLoginPage2() {
+        log.info("asdfasdfasdfasdfasdf");
+        return "https://kauth.kakao.com/oauth/authorize?client_id=6bd39095290563c7275db8ec2daeda3b&redirect_uri=http://localhost:8080/api/user/kakao/callback&response_type=code";
     }
 
 

@@ -27,6 +27,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtUtil.getJwtFromHeader(request);
+
         // 로그인의 경우 이미 permit. 하지만, Header 에 JWT 를 들고 있으면 무조건 검사를 시행하는게 문제
         if(StringUtils.hasText(token)
                 // 인가 요청시 확인 없이 넘어가야하는 주소들 추가
@@ -49,7 +50,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 return;
             }
         }
-
+        log.info("AuthorizationFilter");
         filterChain.doFilter(request, response);
     }
 
