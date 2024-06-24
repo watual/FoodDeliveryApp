@@ -27,12 +27,13 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<ResponseDto> order(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody OrderRequestDto orderRequestDto
+//            @RequestBody OrderRequestDto orderRequestDto
+            @RequestParam Long cartId
     ) {
         // 로그인한 사람의 ID
         orderService.order(
                 userDetails.getUser(),
-                orderRequestDto.getCartId());
+                cartId);
 
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()

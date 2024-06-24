@@ -16,6 +16,7 @@ import java.util.List;
 @Builder
 public class CartResponseDto {
 
+    private Long cartId;
     private String storeName;
     // 장바구니 1개에 메뉴 여러개
     private List<CartDetailResponseDto> cartDetailList;

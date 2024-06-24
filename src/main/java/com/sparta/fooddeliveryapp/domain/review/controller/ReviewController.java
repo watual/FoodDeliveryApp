@@ -28,12 +28,11 @@ public class ReviewController {
     public ResponseEntity<ResponseDto> createReview(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody ReviewCreateRequestDto requestDto) {
-        Review review = reviewService.createReview(userDetails.getUser(), requestDto);
+        reviewService.createReview(userDetails.getUser(), requestDto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
                         .status(HttpStatus.OK)
                         .message("리뷰 등록 완료")
-                        .data(review)
                         .build());
     }
 
@@ -49,12 +48,11 @@ public class ReviewController {
     public ResponseEntity<ResponseDto> updateReview(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody ReviewUpdateRequestDto requestDto) {
-        Review review = reviewService.updateReview(userDetails.getUser(), requestDto);
+        reviewService.updateReview(userDetails.getUser(), requestDto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
                         .status(HttpStatus.OK)
                         .message("리뷰 수정 완료")
-                        .data(review)
                         .build());
     }
 

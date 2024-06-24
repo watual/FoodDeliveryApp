@@ -30,7 +30,7 @@ public class ReviewService {
     private final OrderRepository orderRepository;
 
     @Transactional
-    public Review createReview(User user, ReviewCreateRequestDto requestDto) {
+    public void createReview(User user, ReviewCreateRequestDto requestDto) {
         Long orderId = requestDto.getOrdersId();
         // 주문내역 조회
         Orders orders = orderRepository.findById(orderId).orElseThrow(
@@ -55,7 +55,6 @@ public class ReviewService {
 
         reviewRepository.save(review);
         log.info("Complete createReview Service");
-        return review;
     }
 
     public ResponseEntity<List<ReviewResponseDto>> getReviews(User user) {
@@ -75,7 +74,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public Review updateReview(User tempUser, ReviewUpdateRequestDto requestDto) {
+    public void updateReview(User tempUser, ReviewUpdateRequestDto requestDto) {
         Review review = reviewRepository.findById(requestDto.getReviewId()).orElseThrow(
                 () -> new NullPointerException("존재하지 않는 리뷰입니다")
         );
@@ -87,7 +86,6 @@ public class ReviewService {
         review.update(
                 requestDto.getContent(),
                 requestDto.getRate());
-        return review;
     }
 
     public void deleteReview(User tempUser, Long reviewId) {

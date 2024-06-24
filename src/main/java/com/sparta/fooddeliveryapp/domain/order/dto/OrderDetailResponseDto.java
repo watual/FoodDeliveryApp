@@ -20,9 +20,12 @@ public class OrderDetailResponseDto {
 
     private Integer count;
 
+    private Long ordersId;
+
     public OrderDetailResponseDto(OrderDetail orderDetail) {
         this.orderDetailId = orderDetail.getOrderDetailId();
         this.menuName = orderDetail.getMenuName();
         this.count = orderDetail.getCount();
+        this.ordersId = orderDetail.getOrders().getOrdersId();
     }
 }

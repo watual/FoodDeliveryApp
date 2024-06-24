@@ -60,8 +60,10 @@ public class KakaoService {
 
         List<String> tokens = new ArrayList<>();
 
-        tokens.add(URLEncoder.encode(accessToken, "utf-8").replaceAll("\\+", "%20"));
-        tokens.add(URLEncoder.encode(refreshToken, "utf-8").replaceAll("\\+", "%20"));
+        tokens.add(accessToken);
+        tokens.add(refreshToken);
+//        tokens.add(URLEncoder.encode(accessToken, "utf-8").replaceAll("\\+", "%20"));
+//        tokens.add(URLEncoder.encode(refreshToken, "utf-8").replaceAll("\\+", "%20"));
 
         kakaoUser.setRefreshToken(refreshToken);
         userRepository.save(kakaoUser);

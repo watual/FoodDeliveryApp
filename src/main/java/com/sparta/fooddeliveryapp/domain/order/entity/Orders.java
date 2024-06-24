@@ -28,7 +28,6 @@ public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private Long ordersId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -54,6 +53,4 @@ public class Orders {
         this.totalPrice = totalPrice;
         this.storeName = store.getStoreName();
     }
-
-
 }

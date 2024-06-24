@@ -20,12 +20,14 @@ import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -59,7 +61,9 @@ public class OrderService {
                 user,
                 totalPrice
         );
+        log.info("오더 아이디 DB 저장");
         orderRepository.save(orders);
+        log.info("저장 완료");
         // 주문 목록도 저장
         for (CartDetail cartDetail : cartDetailList) {
             OrderDetail orderDetail = new OrderDetail(orders, cartDetail.getMenu(), 1);
@@ -93,12 +97,12 @@ public class OrderService {
         Page<Orders> ordersPage = orderRepository.findAllByUserOrderByCreatedAtDesc(user, pageable);
 
         List<OrderResponseDto> orderResponseDtoList = new ArrayList<>();
-        List<OrderDetailResponseDto> orderDetailResponseDtoList = new ArrayList<>();
 
         for (Orders orders : ordersPage) {
             //이 주문번호에 해당하는 주문상세 리스트 조회하는 메서드가 필요하다.
-            List<OrderDetail> orderDetailList = orderDetailRepository.findAllByOrderId(orders.getOrdersId());
+            List<OrderDetail> orderDetailList = orderDetailRepository.findAllByOrders(orders);
 
+            List<OrderDetailResponseDto> orderDetailResponseDtoList = new ArrayList<>();
             for (OrderDetail orderDetail : orderDetailList) {
                 orderDetailResponseDtoList.add(new OrderDetailResponseDto(orderDetail));
             }

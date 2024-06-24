@@ -70,7 +70,8 @@ public class CartService {
                     )
                     .toList();
             cartItems.add(new CartResponseDto(
-                cart.getStore().getStoreName(),
+                    cart.getCartId(),
+                    cart.getStore().getStoreName(),
                     cartDetailResponseDtoList
             ));
         }
