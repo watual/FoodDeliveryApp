@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class StoreService {
@@ -41,6 +43,23 @@ public class StoreService {
         storeRepository.save(store);
     }
 
+    public void updateStore(Long storeId, StoreRequestDto storeRequestDto, User user) {
+        Optional<Store> optionalStore = storeRepository.findById(storeId);
+        if (optionalStore.isPresent()) {
+            Store store = optionalStore.get();
+            if (store.getUser().equals(user)) {
+                store.setStoreName(storeRequestDto.getStoreName());
+                store.setIntro(storeRequestDto.getIntro());
+                store.setDialNumber(storeRequestDto.getDialNumber());
+                storeRepository.save(store);
+            } else {
+                throw new RuntimeException("점주만 매장을 수정할 수 있습니다.");
+            }
+        } else {
+            throw new RuntimeException("매장을 찾을 수 없습니다.");
+        }
+    }
+
     public boolean isOwner(String token) {
         try {
             String username = jwtUtil.getUsername(token);
@@ -58,4 +77,7 @@ public class StoreService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
+
+
+
 }
