@@ -1,7 +1,10 @@
 package com.sparta.fooddeliveryapp.domain.user.entity;
 
 
+import com.sparta.fooddeliveryapp.global.common.TimeStamped;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +15,9 @@ import java.util.List;
 @Getter
 @Table(name = "user")
 @NoArgsConstructor
-public class User {
+@AllArgsConstructor
+@Builder
+public class User extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
