@@ -10,12 +10,12 @@ import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
 import com.sparta.fooddeliveryapp.global.exception.*;
 import com.sparta.fooddeliveryapp.global.security.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -173,8 +173,9 @@ public class UserService {
         }
 
         // 가장 최근 4개의 비번을 가져온다(현재 비번 포함)
-        List<UsedPassword> pwdList = usedPasswordRepository.findFourOldestValueByUserId(tempUser.getUserId());
+        List<UsedPassword> pwdList = usedPasswordRepository.findAllByUserId(tempUser.getUserId());
 
+        log.info(String.valueOf(pwdList.size()));
         // Check if the new password has been used before
         for (UsedPassword pwd : pwdList) {
             if (passwordEncoder.matches(requestDto.getNewPassword(), pwd.getPassword())) {
@@ -190,7 +191,13 @@ public class UserService {
 
         pwdList.add(newPassword);
 
-        tempUser.setUsedPasswordList(pwdList);
+        log.info("------");
+        log.info(String.valueOf(pwdList.size()));
+        if(pwdList.size() >= 5){
+            Long pwdId = usedpasswordRepository.findOldestValueByUserId(tempUser.getUserId());
+            usedPasswordRepository.deleteById(pwdId);
+        }
+        usedPasswordRepository.save(newPassword);
         tempUser.updatePassword(newPwd);
     }
 }
