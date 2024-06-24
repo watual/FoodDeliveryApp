@@ -32,4 +32,5 @@ public class Menu {
 
     @Column(updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
 }
