@@ -5,13 +5,13 @@ import lombok.Getter;
 @Getter
 public class ProfileResponseDto {
 
-    private Long userId;
-    private String name;
-    private String nickname;
-    private String address;
-    private String phone;
-    private String email;
-    private String intro;
+    private final Long userId;
+    private final String name;
+    private final String nickname;
+    private final String address;
+    private final String phone;
+    private final String email;
+    private final String intro;
 
     public ProfileResponseDto(Long userId, String name, String nickname, String address, String phone, String email, String intro) {
         this.userId = userId;

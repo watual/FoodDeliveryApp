@@ -41,6 +41,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 && !request.getRequestURL().toString().contains("/api/users/login")
                 && !request.getRequestURL().toString().contains("/api/users/signup")
                 && !request.getRequestURL().toString().contains("/api/users/profile/")
+                && !request.getRequestURL().toString().contains("/api/users/kakao")
         ){
             log.info("토큰 검수 시행");
             if(!jwtUtil.validateToken(token)){

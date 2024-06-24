@@ -133,7 +133,6 @@ public class UserService {
     }
 
     public ProfileResponseDto getProfile(User user) {
-
         Long userId = user.getUserId();
         String name = user.getName();
         String nickname = user.getNickname();

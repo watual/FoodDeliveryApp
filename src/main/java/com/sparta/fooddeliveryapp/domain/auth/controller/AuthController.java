@@ -26,7 +26,12 @@ public class AuthController {
     }
 
     @GetMapping("/auth/test")
-    public ResponseEntity<String> test(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        return ResponseEntity.status(HttpStatus.OK).body("응답 테스트");
+    public ResponseEntity<String> test() {
+        return ResponseEntity.status(HttpStatus.OK).body("응답 테스트 성공");
+    }
+
+    @GetMapping("/nonAuth/test")
+    public ResponseEntity<String> tokenTest() {
+        return ResponseEntity.status(HttpStatus.OK).body("응답 테스트 성공");
     }
 }

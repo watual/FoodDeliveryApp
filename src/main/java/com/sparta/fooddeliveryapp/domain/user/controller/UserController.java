@@ -143,7 +143,11 @@ public class UserController {
               "</html>";
         return ResponseEntity.status(HttpStatus.OK).body(htmlResponse);
     }
-
+    @GetMapping("/kakao/setToken")
+    public String setToken(@RequestParam String token, HttpServletResponse response) {
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+        return "토큰 교환 성공";
+    }
     @GetMapping("/kakao")
     public String kakaoLoginPage() {
         return "https://kauth.kakao.com/oauth/authorize?client_id=f05a3acaceda30592f534db56647e0e8&redirect_uri=https://localhost:443/api/users/kakao/callback&response_type=code";

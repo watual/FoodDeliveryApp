@@ -1,6 +1,7 @@
 package com.sparta.fooddeliveryapp.domain.like.controller;
 
 import com.sparta.fooddeliveryapp.domain.like.dto.UserLikeRequestDto;
+import com.sparta.fooddeliveryapp.domain.like.dto.UserLikeResponseDto;
 import com.sparta.fooddeliveryapp.domain.like.entity.UserLike;
 import com.sparta.fooddeliveryapp.domain.like.repository.UserLikeRepository;
 import com.sparta.fooddeliveryapp.domain.like.service.UserLikeService;
@@ -51,7 +52,7 @@ public class UserLikeController {
 
     @GetMapping
     public ResponseEntity<ResponseDto> getUserLike(@RequestBody UserLikeRequestDto userLikeRequestDto) {
-        List<UserLike> userLikeList = userLikeService.getUserLike(userLikeRequestDto);
+        List<UserLikeResponseDto> userLikeList = userLikeService.getUserLike(userLikeRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
                         .status(HttpStatus.OK)

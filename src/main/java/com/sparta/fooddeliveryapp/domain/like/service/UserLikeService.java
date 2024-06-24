@@ -1,6 +1,7 @@
 package com.sparta.fooddeliveryapp.domain.like.service;
 
 import com.sparta.fooddeliveryapp.domain.like.dto.UserLikeRequestDto;
+import com.sparta.fooddeliveryapp.domain.like.dto.UserLikeResponseDto;
 import com.sparta.fooddeliveryapp.domain.like.entity.UserLike;
 import com.sparta.fooddeliveryapp.domain.like.repository.UserLikeRepository;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
@@ -35,9 +36,16 @@ public class UserLikeService {
         userLikeRepository.delete(userLike);
     }
 
-    public List<UserLike> getUserLike(UserLikeRequestDto userLikeRequestDto) {
-        return userLikeRepository.findAllByUserLikeTypeAndTypeId(userLikeRequestDto.getUserLikeType(), userLikeRequestDto.getTypeId()).orElseThrow(
+    public List<UserLikeResponseDto> getUserLike(UserLikeRequestDto userLikeRequestDto) {
+         List<UserLike> userLikeList = userLikeRepository.findAllByUserLikeTypeAndTypeId(userLikeRequestDto.getUserLikeType(), userLikeRequestDto.getTypeId()).orElseThrow(
                 () -> new NullPointerException("등록된 좋아요가 없습니다")
         );
+        return userLikeList.stream().map(
+                userLike -> UserLikeResponseDto.builder()
+                        .userId(userLike.getUser().getUserId())
+                        .userLikeType(userLike.getUserLikeType())
+                        .typeId(userLike.getTypeId())
+                        .build()
+        ).toList();
     }
 }
