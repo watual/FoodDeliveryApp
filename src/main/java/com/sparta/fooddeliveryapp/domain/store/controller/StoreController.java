@@ -1,8 +1,10 @@
 package com.sparta.fooddeliveryapp.domain.store.controller;
 
+import com.sparta.fooddeliveryapp.domain.store.dto.StoreRequestDto;
 import com.sparta.fooddeliveryapp.domain.store.dto.StoreResponseDto;
 import com.sparta.fooddeliveryapp.domain.store.entity.Store;
 import com.sparta.fooddeliveryapp.domain.store.service.StoreService;
+import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -16,7 +18,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/stores")
 public class StoreController {
     @Autowired
-    private StoreService storeService;
+    private final StoreService storeService;
+
+    public StoreController(StoreService storeService) {
+        this.storeService = storeService;
+    }
 
     @GetMapping
     public List<StoreResponseDto> getAllStores(
@@ -55,5 +61,23 @@ public class StoreController {
         )).collect(Collectors.toList());
 
         return ResponseEntity.ok(response);
+    }
+
+    // 매장 등록 (점주 유저)
+    @PostMapping
+    public ResponseEntity<?> createStore(
+            @RequestHeader("Authorization") String token,
+            @RequestBody StoreRequestDto storeRequestDto) {
+        try {
+            boolean isOwner = storeService.isOwner(token);
+            if (!isOwner) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("점주만 매장을 등록할 수 있습니다.");
+            }
+            User user = storeService.getUserFromToken(token);
+            storeService.createStore(storeRequestDto, user);
+            return ResponseEntity.status(HttpStatus.OK).body("매장등록 완료");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("유효하지 않은 토큰입니다.");
+        }
     }
 }
