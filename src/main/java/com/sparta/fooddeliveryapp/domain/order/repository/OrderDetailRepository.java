@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
 
-    @Query("select od from OrderDetail od where od.orders.ordersId = :orderId")
-    List<OrderDetail> findAllByOrdersId(Long orderId);
+    @Query("select od from OrderDetail od where od.orders.orderId = :orderId")
+    List<OrderDetail> findAllByOrderId(Long orderId);
 }
