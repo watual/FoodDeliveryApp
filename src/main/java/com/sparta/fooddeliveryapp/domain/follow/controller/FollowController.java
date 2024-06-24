@@ -1,6 +1,7 @@
 package com.sparta.fooddeliveryapp.domain.follow.controller;
 
 import com.sparta.fooddeliveryapp.domain.follow.dto.FollowRequestDto;
+import com.sparta.fooddeliveryapp.domain.follow.dto.FollowResponseDto;
 import com.sparta.fooddeliveryapp.domain.follow.entity.Follow;
 import com.sparta.fooddeliveryapp.domain.follow.service.FollowService;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
@@ -12,10 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,11 +29,36 @@ public class FollowController {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody FollowRequestDto followRequestDto
     ) {
-        Follow follow = followService.addUserLike(userDetails.getUser(), followRequestDto);
+        followService.addUserLike(userDetails.getUser(), followRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
                         .status(HttpStatus.OK)
-                        .message("좋아요 완료")
+                        .message("팔로우 완료")
+                        .build());
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ResponseDto> deleteFollow(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody FollowRequestDto followRequestDto
+    ){
+        followService.deleteUserLike(userDetails.getUser(), followRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ResponseDto.builder()
+                        .status(HttpStatus.OK)
+                        .message("팔로우 취소")
+                        .build());
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseDto> getFollowList(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        List<FollowResponseDto> followList = followService.getFollowList(userDetails.getUser());
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.builder()
+                        .status(HttpStatus.OK)
+                        .message("팔로우 조회 성공")
+                        .data(followList)
                         .build());
     }
 }

@@ -69,22 +69,21 @@ public class StoreService {
     }
 
     public void deleteStore(Long storeId, User user) {
-        Optional<Store> optionalStore = storeRepository.findById(storeId);
-        if (optionalStore.isPresent()) {
-            Store store = optionalStore.get();
-            if (store.getUser().equals(user)) {
-                storeRepository.delete(store);
-            } else {
-                throw new RuntimeException("점주만 매장을 삭제할 수 있습니다.");
+        Store store = storeRepository.findById(storeId).orElseThrow(
+                () -> new RuntimeException("매장을 찾을 수 없습니다.")
+        );
+        if (user.getRole() != UserRoleEnum.ADMIN) {
+            if (!store.getUser().equals(user)) {
+                throw new RuntimeException("매장 운영자만 매장을 삭제할 수 있습니다.");
             }
-        } else {
-            throw new RuntimeException("매장을 찾을 수 없습니다.");
         }
+        storeRepository.delete(store);
     }
+
 
     public void isOwner(String token) {
         User user = getUserFromToken(token);
-        if(!user.getRole().equals(UserRoleEnum.SELLER)){
+        if (!user.getRole().equals(UserRoleEnum.SELLER)) {
             throw new IllegalArgumentException("해당 유저는 점주가 아닙니다.");
         }
     }
