@@ -4,18 +4,11 @@ import com.sparta.fooddeliveryapp.domain.menu.entity.Menu;
 import com.sparta.fooddeliveryapp.domain.store.entity.Store;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.global.common.TimeStamped;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -39,6 +32,9 @@ public class Cart extends TimeStamped {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartDetail> cartDetails;
 
     public Cart(Store store, User user) {
         this.store = store;

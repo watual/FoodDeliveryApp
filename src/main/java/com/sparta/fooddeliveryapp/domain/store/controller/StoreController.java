@@ -6,10 +6,12 @@ import com.sparta.fooddeliveryapp.domain.store.entity.Store;
 import com.sparta.fooddeliveryapp.domain.store.service.StoreService;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.global.common.ResponseDto;
+import com.sparta.fooddeliveryapp.global.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -67,12 +69,9 @@ public class StoreController {
     // 매장 등록 (점주 유저)
     @PostMapping
     public ResponseEntity<?> createStore(
-            @RequestHeader("Authorization") String token, @RequestBody StoreRequestDto storeRequestDto) {
-        String accessToken = token.substring(7);
-        storeService.isOwner(accessToken);
-
-        User user = storeService.getUserFromToken(accessToken);
-        storeService.createStore(storeRequestDto, user);
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody StoreRequestDto storeRequestDto) {
+        storeService.createStore(storeRequestDto, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
                         .status(HttpStatus.OK)
@@ -83,14 +82,11 @@ public class StoreController {
     // 매장 수정 (점주 유저)
     @PatchMapping("/{storeId}")
     public ResponseEntity<ResponseDto> updateStore(
-            @RequestHeader("Authorization") String token,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long storeId,
             @RequestBody StoreRequestDto storeRequestDto) {
-        String accessToken = token.substring(7);
-        storeService.isOwner(accessToken);
 
-        User user = storeService.getUserFromToken(token);
-        storeService.updateStore(storeId, storeRequestDto, user);
+        storeService.updateStore(storeId, storeRequestDto, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(
                     ResponseDto.builder()
                             .status(HttpStatus.OK)
@@ -101,13 +97,9 @@ public class StoreController {
     // 매장 삭제 (점주 유저)
     @DeleteMapping("/{storeId}")
     public ResponseEntity<?> deleteStore(
-            @RequestHeader("Authorization") String token,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long storeId) {
-        String accessToken = token.substring(7);
-        storeService.isOwner(accessToken);
-
-        User user = storeService.getUserFromToken(token);
-        storeService.deleteStore(storeId, user);
+        storeService.deleteStore(storeId, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
                         .status(HttpStatus.OK)

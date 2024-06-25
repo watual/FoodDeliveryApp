@@ -34,4 +34,10 @@ public class AuthController {
     public ResponseEntity<String> tokenTest() {
         return ResponseEntity.status(HttpStatus.OK).body("응답 테스트 성공");
     }
+
+    @GetMapping("/auth/apiTable")
+    public String apiTable() {
+
+        return "ResponseEntity.status(HttpStatus.OK).body()";
+    }
 }

@@ -49,7 +49,7 @@ public class StoreService {
         Optional<Store> optionalStore = storeRepository.findById(storeId);
         if (optionalStore.isPresent()) {
             Store store = optionalStore.get();
-            if (store.getUser().equals(user)) {
+            if (store.getUser().getUserId().equals(user.getUserId())) {
                 if (storeRequestDto.getStoreName() != null) {
                     store.setStoreName(storeRequestDto.getStoreName());
                 }
@@ -73,7 +73,7 @@ public class StoreService {
                 () -> new RuntimeException("매장을 찾을 수 없습니다.")
         );
         if (user.getRole() != UserRoleEnum.ADMIN) {
-            if (!store.getUser().equals(user)) {
+            if (!store.getUser().getUserId().equals(user.getUserId())) {
                 throw new RuntimeException("매장 운영자만 매장을 삭제할 수 있습니다.");
             }
         }
