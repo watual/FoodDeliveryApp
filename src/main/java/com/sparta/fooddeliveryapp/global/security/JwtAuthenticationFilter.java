@@ -71,14 +71,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         userRepository.save(user);
 
         // 로그인 성공 메세지 반환
-        log.info("로그인 성공!");
+        log.info("success 22222222222222");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(new ObjectMapper().writeValueAsString("로그인 성공!"));
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        log.info("로그인 실패");
+        log.info("로그인 실패 1111111111111");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(new ObjectMapper().writeValueAsString("로그인 실패"));
         response.setStatus(401);

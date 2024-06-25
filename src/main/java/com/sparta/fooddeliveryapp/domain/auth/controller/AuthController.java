@@ -25,14 +25,24 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK).body("토큰이 새로 발급되었습니다.");
     }
 
-    @GetMapping("/auth/test")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.status(HttpStatus.OK).body("응답 테스트 성공");
+    @GetMapping("/auth/test1")
+    public ResponseEntity<String> test1() {
+        return ResponseEntity.status(HttpStatus.OK).body("test Success");
+    }
+
+    @GetMapping("/auth/test2")
+    public ResponseEntity<String> test2() {
+        return ResponseEntity.status(HttpStatus.OK).body("테스트 성공");
+    }
+
+    @GetMapping("/auth/test3")
+    public String test3() {
+        return "테스트 성공";
     }
 
     @GetMapping("/nonAuth/test")
     public ResponseEntity<String> tokenTest() {
-        return ResponseEntity.status(HttpStatus.OK).body("응답 테스트 성공");
+        return ResponseEntity.status(HttpStatus.OK).body("test Success");
     }
 
     @GetMapping("/auth/apiTable")
