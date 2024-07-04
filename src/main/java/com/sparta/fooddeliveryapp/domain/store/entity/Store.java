@@ -1,5 +1,6 @@
 package com.sparta.fooddeliveryapp.domain.store.entity;
 
+import com.sparta.fooddeliveryapp.domain.like.entity.UserLike;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -31,4 +32,15 @@ public class Store {
 
     @Column
     private String intro;
+
+    @Column
+    private Long userLikeCount;
+
+    public void addUserLike() {
+        this.userLikeCount++;
+    }
+
+    public void subtractUserLike() {
+        this.userLikeCount--;
+    }
 }

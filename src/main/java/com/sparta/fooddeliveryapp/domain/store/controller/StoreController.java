@@ -3,6 +3,7 @@ package com.sparta.fooddeliveryapp.domain.store.controller;
 import com.sparta.fooddeliveryapp.domain.store.dto.StoreRequestDto;
 import com.sparta.fooddeliveryapp.domain.store.dto.StoreResponseDto;
 import com.sparta.fooddeliveryapp.domain.store.entity.Store;
+import com.sparta.fooddeliveryapp.domain.store.repository.querydsl.StoreRepositoryCustomImpl;
 import com.sparta.fooddeliveryapp.domain.store.service.StoreService;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.global.common.ResponseDto;
@@ -22,6 +23,8 @@ import java.util.stream.Collectors;
 public class StoreController {
     @Autowired
     private final StoreService storeService;
+    @Autowired
+    private StoreRepositoryCustomImpl storeRepositoryCustomImpl;
 
     public StoreController(StoreService storeService) {
         this.storeService = storeService;
@@ -39,7 +42,8 @@ public class StoreController {
                 store.getRate(),
                 store.getStoreName(),
                 store.getDialNumber(),
-                store.getIntro()
+                store.getIntro(),
+                store.getUserLikeCount()
         )).collect(Collectors.toList());
     }
 
@@ -60,7 +64,8 @@ public class StoreController {
                 store.getRate(),
                 store.getStoreName(),
                 store.getDialNumber(),
-                store.getIntro()
+                store.getIntro(),
+                store.getUserLikeCount()
         )).collect(Collectors.toList());
 
         return ResponseEntity.ok(response);

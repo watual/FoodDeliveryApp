@@ -16,4 +16,5 @@ public class ReviewResponseDto {
     private Long ordersId;
     private String content;
     private Long rate;
+    private Long userLikeCount;
 }

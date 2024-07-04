@@ -1,6 +1,7 @@
 package com.sparta.fooddeliveryapp.domain.review.entity;
 
 import com.sparta.fooddeliveryapp.domain.order.entity.Orders;
+import com.sparta.fooddeliveryapp.domain.review.repository.ReviewRepository;
 import com.sparta.fooddeliveryapp.domain.store.entity.Store;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.global.common.TimeStamped;
@@ -37,8 +38,19 @@ public class Review extends TimeStamped {
     @Column
     private Long rate;
 
+    @Column
+    private Long userLikeCount;
+
     public void update(String content, Long rate) {
         this.content = content;
         this.rate = rate;
+    }
+
+    public void addUserLike() {
+        this.userLikeCount++;
+    }
+
+    public void subtractUserLike() {
+        this.userLikeCount--;
     }
 }

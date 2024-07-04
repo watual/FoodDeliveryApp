@@ -20,23 +20,4 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                 .fetchOne();
         return review;
     }
-
-    //    @Override
-//    public Page<UserLike> selectLikeList(UserLikeType userLikeType, Long typeId, Pageable pageable) {
-//        QUserLike qUserLike = QUserLike.userLike;
-//        List<UserLike> userLikeList = jpaQueryFactory.selectFrom(qUserLike)
-//                .where(qUserLike.userLikeType.eq(userLikeType)
-//                        .and(qUserLike.typeId.eq(typeId)))
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch();
-//
-//        JPAQuery<Long> totalSize = jpaQueryFactory.select(Wildcard.count)
-//                .from(qUserLike)
-//                .where(qUserLike.userLikeType.eq(userLikeType)
-//                        .and(qUserLike.typeId.eq(typeId)));
-////                .where(qUserLike.typeId.eq(typeId));
-//
-//        return PageableExecutionUtils.getPage(userLikeList, pageable, totalSize::fetchOne);
-//    }
 }

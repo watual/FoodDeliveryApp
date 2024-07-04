@@ -11,4 +11,5 @@ public class StoreResponseDto {
     private final String storeName;
     private final String dialNumber;
     private final String intro;
+    private final Long userLikeCount;
 }

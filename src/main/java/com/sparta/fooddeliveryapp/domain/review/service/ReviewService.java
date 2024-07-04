@@ -68,6 +68,7 @@ public class ReviewService {
                         .ordersId(review.getOrdersId())
                         .content(review.getContent())
                         .rate(review.getRate())
+                        .userLikeCount(review.getUserLikeCount())
                         .build()
                         ).toList()
         );
