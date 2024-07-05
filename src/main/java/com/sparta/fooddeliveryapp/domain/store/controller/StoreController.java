@@ -8,6 +8,7 @@ import com.sparta.fooddeliveryapp.domain.store.service.StoreService;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.global.common.ResponseDto;
 import com.sparta.fooddeliveryapp.global.security.UserDetailsImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/stores")
 public class StoreController {
@@ -34,6 +36,7 @@ public class StoreController {
     public List<StoreResponseDto> getAllStores(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
+        log.info("getAllStores");
 
         Page<Store> storePage = storeService.getAllStores(page, size);
 
@@ -52,6 +55,7 @@ public class StoreController {
             @RequestParam("searchStore") String searchStore,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
+        log.info("searchStores");
 
         Page<Store> storePage = storeService.searchStores(searchStore, page, size);
 
@@ -76,6 +80,7 @@ public class StoreController {
     public ResponseEntity<?> createStore(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody StoreRequestDto storeRequestDto) {
+        log.info("createStore");
         storeService.createStore(storeRequestDto, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
@@ -90,6 +95,7 @@ public class StoreController {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long storeId,
             @RequestBody StoreRequestDto storeRequestDto) {
+        log.info("updateStore");
 
         storeService.updateStore(storeId, storeRequestDto, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -104,11 +110,36 @@ public class StoreController {
     public ResponseEntity<?> deleteStore(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long storeId) {
+        log.info("deleteStore");
         storeService.deleteStore(storeId, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
                         .status(HttpStatus.OK)
                         .message("매장삭제 완료")
                         .build());
+    }
+
+    // 내가 좋아하는 게시글 목록 조회기능 추가하기
+    @GetMapping("/myLike")
+    public ResponseEntity<?> myLikeStores(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        log.info("myLikeStores");
+        Page<Store> storePage = storeService.myLikeStores(userDetails.getUser(), page, size);
+        if (storePage.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("검색한 매장이 없습니다.");
+        }
+
+        List<StoreResponseDto> response = storePage.stream().map(store -> new StoreResponseDto(
+                store.getStoreId(),
+                store.getRate(),
+                store.getStoreName(),
+                store.getDialNumber(),
+                store.getIntro(),
+                store.getUserLikeCount()
+        )).collect(Collectors.toList());
+
+        return ResponseEntity.ok(response);
     }
 }

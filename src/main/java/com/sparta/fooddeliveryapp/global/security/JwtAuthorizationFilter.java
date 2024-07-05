@@ -31,8 +31,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = jwtUtil.getJwtFromHeader(request);
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
 
+        String token = jwtUtil.getJwtFromHeader(request);
+        log.info("Authorization token: {}", request.getHeader("Authorization"));
+        log.info("test token: {}", request.getHeader("test"));
         log.info("token : " + token);
         // 로그인의 경우 이미 permit. 하지만, Header 에 JWT 를 들고 있으면 무조건 검사를 시행하는게 문제
         if(StringUtils.hasText(token)

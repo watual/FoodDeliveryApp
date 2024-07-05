@@ -10,6 +10,7 @@ import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
 import com.sparta.fooddeliveryapp.global.common.ResponseDto;
 import com.sparta.fooddeliveryapp.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/like")
@@ -29,6 +31,7 @@ public class UserLikeController {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody UserLikeRequestDto userLikeRequestDto
     ) {
+        log.info("addUserLike");
         UserLike userLike = userLikeService.addUserLike(userDetails.getUser(), userLikeRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
@@ -42,6 +45,7 @@ public class UserLikeController {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody UserLikeRequestDto userLikeRequestDto
     ) {
+        log.info("deleteUserLike");
         userLikeService.deleteUserLike(userDetails.getUser(), userLikeRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
@@ -52,6 +56,7 @@ public class UserLikeController {
 
     @GetMapping
     public ResponseEntity<ResponseDto> getUserLike(@RequestBody UserLikeRequestDto userLikeRequestDto) {
+        log.info("getUserLike");
         List<UserLikeResponseDto> userLikeList = userLikeService.getUserLike(userLikeRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()

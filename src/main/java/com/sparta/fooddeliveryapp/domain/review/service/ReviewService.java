@@ -7,12 +7,15 @@ import com.sparta.fooddeliveryapp.domain.review.dto.ReviewResponseDto;
 import com.sparta.fooddeliveryapp.domain.review.dto.ReviewUpdateRequestDto;
 import com.sparta.fooddeliveryapp.domain.review.entity.Review;
 import com.sparta.fooddeliveryapp.domain.review.repository.ReviewRepository;
+import com.sparta.fooddeliveryapp.domain.review.repository.querydsl.ReviewRepositoryCustom;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.global.error.exception.InsufficientOrdersException;
 import com.sparta.fooddeliveryapp.global.error.exception.ReviewException;
 import com.sparta.fooddeliveryapp.global.error.exception.UserMismatchException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,7 @@ import java.util.Objects;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final ReviewRepositoryCustom reviewRepositoryCustom;
     private final OrderRepository orderRepository;
 
     @Transactional
@@ -99,5 +103,9 @@ public class ReviewService {
         }
 
         reviewRepository.delete(review);
+    }
+
+    public Page<Review> myLikeReviews(User user, int page, int size) {
+        return reviewRepositoryCustom.selectfromStoreWhereUserLike(user, PageRequest.of(page, size));
     }
 }

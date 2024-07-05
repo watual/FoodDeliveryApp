@@ -1,9 +1,11 @@
 package com.sparta.fooddeliveryapp.domain.store.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 @AllArgsConstructor
 public class StoreResponseDto {
     private final Long storeId;

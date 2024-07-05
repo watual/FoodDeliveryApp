@@ -1,0 +1,127 @@
+### 회원가입 테스트
+POST https://localhost:443/api/users/signup
+Content-Type: application/json
+
+{
+  "loginId" : "id11111",
+  "password" : "Qwer1111!",
+  "name" : "킹원하",
+  "nickname" : "King",
+  "address" : "너의 맘속",
+  "phone" : "01012341111",
+  "email" : "email1@email.com",
+  "intro" : "원하는 배고파요",
+  "role" : "SELLER"
+}
+
+### 로그인 테스트
+POST https://localhost:443/api/users/login
+Content-Type: application/json
+
+{
+  "loginId" : "id11111",
+  "password" : "Qwer1111!"
+}
+
+> {%
+client.global.set("accessToken", response.headers.valueOf("Authorization"));
+%}
+
+### 매장 등록 1
+POST https://localhost:443/api/stores
+Content-Type: application/json
+Authorization: {{accessToken}}
+
+{
+    "storeName" : "할무니 맥주 본점",
+    "intro" : "할무니 맥주 부천소사본점1",
+    "dialNumber" : "0507-1351-0514"
+}
+### 매장 등록 2
+POST https://localhost:443/api/stores
+Content-Type: application/json
+Authorization: {{accessToken}}
+
+{
+  "storeName" : "할무니 맥주 체인점1",
+  "intro" : "할무니 맥주 부천소사본점2",
+  "dialNumber" : "0507-1351-0514"
+}
+### 매장 등록 3
+POST https://localhost:443/api/stores
+Content-Type: application/json
+Authorization: {{accessToken}}
+
+{
+    "storeName" : "할무니 맥주 체인점2",
+    "intro" : "할무니 맥주 부천소사본점3",
+    "dialNumber" : "0507-1351-0514"
+}
+
+### 로그아웃
+POST https://localhost:443/api/users/logout
+Content-Type: application/json
+Authorization: {{accessToken}}
+
+### 다른계정 회원가입
+POST https://localhost:443/api/users/signup
+Content-Type: application/json
+
+{
+  "loginId" : "id111112",
+  "password" : "Qwer1111!",
+  "name" : "킹원하2",
+  "nickname" : "King2",
+  "address" : "너의 맘속2",
+  "phone" : "01012341112",
+  "email" : "email2@email.com",
+  "intro" : "원하는 배불러요",
+  "role" : "SELLER"
+}
+
+### 다른계정 로그인
+POST https://localhost:443/api/users/login
+Content-Type: application/json
+
+{
+  "loginId" : "id111112",
+  "password" : "Qwer1111!"
+}
+
+> {%
+    client.global.set("accessToken", response.headers.valueOf("Authorization"));
+%}
+
+### 좋아요 등록 1
+POST https://localhost:443/api/like
+Content-Type: application/json
+Authorization: {{accessToken}}
+
+{
+  "userLikeType": "STORE",
+  "typeId": 1
+}
+### 좋아요 등록 2
+POST https://localhost:443/api/like
+Content-Type: application/json
+Authorization: {{accessToken}}
+
+{
+  "userLikeType": "STORE",
+  "typeId": 2
+}
+### 좋아요 등록 3
+POST https://localhost:443/api/like
+Content-Type: application/json
+Authorization: {{accessToken}}
+
+{
+  "userLikeType": "STORE",
+  "typeId": 3
+}
+
+### 좋아요 조회
+GET https://localhost:443/api/stores/myLike?page=0&size=5
+Content-Type: application/json
+Authorization: {{accessToken}}
+

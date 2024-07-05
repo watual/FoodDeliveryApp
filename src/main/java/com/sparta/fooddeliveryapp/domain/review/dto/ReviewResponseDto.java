@@ -8,8 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
 public class ReviewResponseDto {
     private Long reviewId;
     private String userName;

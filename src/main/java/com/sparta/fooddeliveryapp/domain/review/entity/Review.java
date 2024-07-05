@@ -38,8 +38,8 @@ public class Review extends TimeStamped {
     @Column
     private Long rate;
 
-    @Column
-    private Long userLikeCount;
+    @Column(nullable = false)
+    private Long userLikeCount = 0L;
 
     public void update(String content, Long rate) {
         this.content = content;

@@ -3,6 +3,7 @@ package com.sparta.fooddeliveryapp.domain.store.service;
 import com.sparta.fooddeliveryapp.domain.store.dto.StoreRequestDto;
 import com.sparta.fooddeliveryapp.domain.store.entity.Store;
 import com.sparta.fooddeliveryapp.domain.store.repository.StoreRepository;
+import com.sparta.fooddeliveryapp.domain.store.repository.querydsl.StoreRepositoryCustom;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
 import com.sparta.fooddeliveryapp.domain.user.entity.UserRoleEnum;
 import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,13 +21,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class StoreService {
-    @Autowired
+
     private final StoreRepository storeRepository;
-
-    @Autowired
+    private final StoreRepositoryCustom storeRepositoryCustom;
     private final UserRepository userRepository;
-
-    @Autowired
     private final JwtUtil jwtUtil;
 
     public Page<Store> getAllStores(int page, int size) {
@@ -92,5 +91,9 @@ public class StoreService {
         String loginId = jwtUtil.extractLoginId(token);
         return userRepository.findByLoginId(loginId)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    public Page<Store> myLikeStores(User user, int page, int size) {
+        return storeRepositoryCustom.selectfromStoreWhereUserLike(user, PageRequest.of(page, size));
     }
 }

@@ -33,8 +33,8 @@ public class Store {
     @Column
     private String intro;
 
-    @Column
-    private Long userLikeCount;
+    @Column(nullable = false)
+    private Long userLikeCount = 0L;
 
     public void addUserLike() {
         this.userLikeCount++;
