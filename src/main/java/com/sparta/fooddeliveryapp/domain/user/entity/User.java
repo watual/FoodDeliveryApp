@@ -55,12 +55,19 @@ public class User extends TimeStamped {
     @Column(name = "status")
     private UserStatusEnum status;
 
+    @Setter
     @Column(name = "refresh_token")
     private String refreshToken;
 
     @Setter
     @Column(name = "kakao_id")
     private Long kakaoId;
+
+    @Column(nullable = false)
+    private Long reviewLikeCount = 0L;
+
+    @Column(nullable = false)
+    private Long storeLikeCount = 0L;
 
     // image 가져오기
     // 생성 및 수정 시간은 타 클래스 implement 가져오는걸로
@@ -72,9 +79,6 @@ public class User extends TimeStamped {
         }
     }
 
-    public void setRefreshToken(String refreshToken){
-        this.refreshToken = refreshToken;
-    }
     public void setStatusDeactivated(){ this.status = UserStatusEnum.DEACTIVATED; }
 
     public void updateName(String name){this.name = name;}
@@ -95,5 +99,18 @@ public class User extends TimeStamped {
         this.intro = intro;
         this.role = role;
         this.status = status;
+    }
+
+    public void addReviewLikeCount() {
+        this.reviewLikeCount++;
+    }
+    public void subtractReviewLikeCount() {
+        this.reviewLikeCount++;
+    }
+    public void addStoreLikeCount() {
+        this.storeLikeCount++;
+    }
+    public void subtractStoreLikeCount() {
+        this.storeLikeCount++;
     }
 }

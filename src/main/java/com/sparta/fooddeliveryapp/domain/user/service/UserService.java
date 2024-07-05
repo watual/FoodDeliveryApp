@@ -140,8 +140,10 @@ public class UserService {
         String phone = user.getPhone();
         String email = user.getEmail();
         String intro = user.getIntro();
+        Long reviewLikeCount = user.getReviewLikeCount();
+        Long storeLikeCount = user.getStoreLikeCount();
 
-        ProfileResponseDto result = new ProfileResponseDto(userId, name, nickname, address, phone, email, intro);
+        ProfileResponseDto result = new ProfileResponseDto(userId, name, nickname, address, phone, email, intro, reviewLikeCount, storeLikeCount);
         log.info("프로필 조회 완료");
         return result;
     }

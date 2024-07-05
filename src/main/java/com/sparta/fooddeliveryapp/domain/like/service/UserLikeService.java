@@ -10,6 +10,7 @@ import com.sparta.fooddeliveryapp.domain.review.repository.querydsl.ReviewReposi
 import com.sparta.fooddeliveryapp.domain.store.entity.Store;
 import com.sparta.fooddeliveryapp.domain.store.repository.querydsl.StoreRepositoryCustom;
 import com.sparta.fooddeliveryapp.domain.user.entity.User;
+import com.sparta.fooddeliveryapp.domain.user.repository.UserRepository;
 import com.sparta.fooddeliveryapp.global.error.exception.DuplicateLikeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,10 +24,11 @@ public class UserLikeService {
     private final UserLikeRepository userLikeRepository;
     private final ReviewRepositoryCustom reviewRepositoryCustom;
     private final StoreRepositoryCustom storeRepositoryCustom;
+    private final UserRepository userRepository;
 
     @Transactional
     // 좋아요 남기기
-    public UserLike addUserLike(User user, UserLikeRequestDto userLikeRequestDto) {
+    public void addUserLike(User user, UserLikeRequestDto userLikeRequestDto) {
         // 사용자당 한 번만 좋아요 가능
         if (userLikeRepository.existsByUserAndUserLikeTypeAndTypeId(user, userLikeRequestDto.getUserLikeType(), userLikeRequestDto.getTypeId())) {
             throw new DuplicateLikeException("이미 좋아요를 눌렀습니다");
@@ -41,6 +43,7 @@ public class UserLikeService {
             }
             // 리뷰의 좋아요 개수 증가
             review.addUserLike();
+            user.addReviewLikeCount();
         } else if (userLikeRequestDto.getUserLikeType().equals(UserLikeType.STORE)) {
             // 가게 주인 누군지 가져오기
             Store store = storeRepositoryCustom.selectfromStoreWhereStoreId(userLikeRequestDto.getTypeId());
@@ -49,11 +52,12 @@ public class UserLikeService {
             }
             // 가게의 좋아요 개수 증가
             store.addUserLike();
+            user.addStoreLikeCount();
         } else {
             throw new IllegalArgumentException("좋아요를 달 수 없는 입니다");
         }
-
-        return userLikeRepository.save(
+        userRepository.save(user);
+        userLikeRepository.save(
                 UserLike.builder()
                         .user(user)
                         .userLikeType(userLikeRequestDto.getUserLikeType())

@@ -32,7 +32,7 @@ public class UserLikeController {
             @RequestBody UserLikeRequestDto userLikeRequestDto
     ) {
         log.info("addUserLike");
-        UserLike userLike = userLikeService.addUserLike(userDetails.getUser(), userLikeRequestDto);
+        userLikeService.addUserLike(userDetails.getUser(), userLikeRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseDto.builder()
                         .status(HttpStatus.OK)
